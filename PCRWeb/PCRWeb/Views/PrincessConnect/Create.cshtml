@@ -1,31 +1,48 @@
-﻿@model PCRWeb.Models.PrincessConnect
+﻿@model PCRWeb.ViewModels.PrincessConnectViewModel
 @{
     ViewBag.Title = "Index";//顯示標題用
     var allRoleList = ViewBag.List;
 }
+<input type="button" value="清除全部" onclick="clickAllClear()" />
+<input type="button" value="新增進攻" onclick="clickLink('attack')" />
+<input type="button" value="新增防守" onclick="clickLink('defense')" />
+<br>
 @*建立新增資料所需的表單*@
-@for (int i = 0; i < 134; i++)
-{
-    <button type="submit" id="@i" onclick="clickImageBolder(@(i))" style="width: 70px; height: 70px; border:none;">
-    <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px; border:none;" />
-    </button>
-}
-<input type="button" value="進攻" onclick="clickLink('attack')" />
-@*
-    display TODO
-*@
-<input type="button" value="防守" onclick="clickLink('defense')" />
+<div id="Attack">
+    @for (int i = 0; i < 134; i++)
+    {
+        <button type="submit" id="@i" value="@(allRoleList[i])" onclick="clickImageBolder(@(i))" style="width: 70px; height: 70px; border:none;">
+            <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px; border:none;" />
+        </button>
+    }
+</div>
 <script type="text/javascript">
+    let fiveCount = 0;
+    let Role = [];
     let roleCount = 134;
-    let isAttack = true;
-    let isSelect = true;
     let falseCount = 0;
     var pcrState = [];
     let allRoleName = "";
+    let a1 = ""; let a2 = ""; let a3 = ""; let a4 = ""; let a5 = "";
+    let d1 = ""; let d2 = ""; let d3 = ""; let d4 = ""; let d5 = "";
     for (var i = 0; i < roleCount; i++) {
         pcrState.push(true);
     }
+
+    function clickAllClear() {
+        falseCount = 0;
+        //document.getElementById('ARN').innerHTML = "";
+        allRoleName = "";
+        for (var i = 0; i < roleCount; i++) {
+            console.log("進去");
+            pcrState[i] = true;
+            document.getElementById(i).style = "border:none; width: 70px; height: 70px;";
+            document.getElementById(i).removeAttribute("disabled");
+        }
+    }
+
     function clickImageBolder(number) {
+        falseCount = 0;
         if (pcrState[number]) {
             document.getElementById(number).style = "color:blue; border: solid 4px ; width: 70px; height: 70px;";
             pcrState[number] = !pcrState[number];
@@ -39,12 +56,11 @@
                 falseCount++;
             }
         }
-        console.log("FC" + falseCount);
+
         if (falseCount == 5) {
             for (var i = 0; i < roleCount; i++) {
                 if (pcrState[i] == true) {
                     document.getElementById(i).setAttribute("disabled", "disabled");
-                    console.log("有進判斷" + falseCount);
                 }
             }
         }
@@ -52,20 +68,55 @@
             for (var i = 0; i < roleCount; i++) {
                 if (pcrState[i] == true) {
                     document.getElementById(i).removeAttribute("disabled");
-                    console.log("有進判斷" + falseCount);
                 }
             }
         }
+        for (var i = 0; i < roleCount; i++) {
+            if (pcrState[i] == false) {
+                allRoleName += document.getElementById(i).value + " ";
+            }
+        }
+        //document.getElementById('ARN').innerHTML = allRoleName;
+        allRoleName = "";
         falseCount = 0;
     }
     function clickLink(value) {
-        if (isAttack) {
-            document.getElementById("CreateData").style = "display:block; position: absolute; border: soli 5px; top: 100px;";
-            isAttack = !isAttack;
+
+        if (value == "attack") {
+            attackClear();
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    Role.push(document.getElementById(i).value);
+                }
+            }
+            fiveCount = 0;
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    var obj = document.getElementById("ai" + fiveCount);
+                    obj.setAttribute("src", "../Images/" + Role[fiveCount] + ".png");//不能用~/Imges
+                    fiveCount++;
+                }
+            }
+            a1 = Role[0]; a2 = Role[1]; a3 = Role[2]; a4 = Role[3]; a5 = Role[4];
         }
-        else {
-            document.getElementById("CreateData").style = "display:None;";
+        if (value == "defense") {
+            defenseClear();
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    Role.push(document.getElementById(i).value);
+                }
+            }
+            fiveCount = 0;
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    var obj = document.getElementById("di" + fiveCount);
+                    obj.setAttribute("src", "../Images/" + Role[fiveCount] + ".png");//不能用~/Imges
+                    fiveCount++;
+                }
+            }
+            d1 = Role[0]; d2 = Role[1]; d3 = Role[2]; d4 = Role[3]; d5 = Role[4];
         }
+        console.log("AD:" + a1 + " " + a2 + " " + a3 + " " + a4 + " " + a5 + " // " + d1 + " " + d2 + " " + d3 + " " + d4 + " " + d5 + " ");
     }
 </script>
 @*
@@ -99,29 +150,48 @@
             }
         }
     </div>
-
-    @using (Html.BeginForm("Create", "PrincessConnect", FormMethod.Get))
-    {
-        <table>
-            <tr>
-                <td>
-                    您所選擇的角色為:@ViewBag.allName
-                </td>
-            </tr>
-        </table>
-    }
 *@
+<script type="text/javascript">
+    function attackClear() {
+        Role = [];
+        fiveCount = 0;
+        for (var i = 0; i < 5; i++) {
+            document.getElementById("ai" + i).removeAttribute("src");
+        }
+    }
+    function defenseClear() {
+        Role = [];
+        fiveCount = 0;
+        for (var i = 0; i < 5; i++) {
+            document.getElementById("di" + i).removeAttribute("src");
+        }
+    }
+</script>
 
-@using (Html.BeginForm("Create", "PrincessConnect"))
+<br>
+<table>
+    <tr>
+        <td>
+            進攻:
+            <img id="ai0" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai1" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai2" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai3" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai4" style="width: 50px; height: 50px; border:none;" />
+        </td>
+
+        <td>
+            &nbsp;&nbsp;&nbsp;
+            防守:
+            <img id="di0" style="width: 50px; height: 50px; border:none;" />
+            <img id="di1" style="width: 50px; height: 50px; border:none;" />
+            <img id="di2" style="width: 50px; height: 50px; border:none;" />
+            <img id="di3" style="width: 50px; height: 50px; border:none;" />
+            <img id="di4" style="width: 50px; height: 50px; border:none;" />
+        </td>
+    </tr>
+</table>
+@using (Html.BeginForm("HandleCreateButtonClick", "PrincessConnect"))
 {
-    <h3>新增留言</h3>
-    <table>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.a1)
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="新增留言" />
+    <button type="submit" name="stateId" />
 }
-
