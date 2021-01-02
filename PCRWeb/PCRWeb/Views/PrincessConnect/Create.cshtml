@@ -4,29 +4,55 @@
     var allRoleList = ViewBag.List;
 }
 @*建立新增資料所需的表單*@
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 @for (int i = 0; i < 134; i++)
 {
-    <button type="submit" id="@i" onclick="clickImageBolder(@(i))" style="width: 60px; height: 60px; border:none;"><img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px; border:none;" /></button>
+    <button type="submit" id="@i" onclick="clickImageBolder(@(i))" style="width: 70px; height: 70px; border:none;">
+    <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px; border:none;" />
+    </button>
 }
 <input type="button" value="進攻" onclick="clickLink('attack')" />
 <input type="button" value="防守" onclick="clickLink('defense')" />
 <script type="text/javascript">
+    let roleCount = 134;
     let isAttack = true;
     let isSelect = true;
+    let falseCount = 0;
     var pcrState = [];
-    for (var i = 0; i < 134; i++) {
+    for (var i = 0; i < roleCount; i++) {
         pcrState.push(true);
     }
     function clickImageBolder(number) {
         if (pcrState[number]) {
-            document.getElementById(number).style = "color:blue; border: solid 2px ; width: 60px; height: 60px;";
+            document.getElementById(number).style = "color:blue; border: solid 4px ; width: 70px; height: 70px;";
             pcrState[number] = !pcrState[number];
         }
         else {
-            document.getElementById(number).style = "border:none;width: 60px; height: 60px;";
+            document.getElementById(number).style = "border:none;width: 70px; height: 70px;";
             pcrState[number] = !pcrState[number];
         }
+        for (var i = 0; i < roleCount; i++) {
+            if (pcrState[i] == false) {
+                falseCount++;
+            }
+        }
+        console.log("FC" + falseCount);
+        if (falseCount == 5) {
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == true) {
+                    document.getElementById(i).setAttribute("disabled", "disabled");
+                    console.log("有進判斷" + falseCount);
+                }
+            }
+        }
+        else {
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == true) {
+                    document.getElementById(i).removeAttribute("disabled");
+                    console.log("有進判斷" + falseCount);
+                }
+            }
+        }
+        falseCount = 0;
     }
     function clickLink(value) {
         if (isAttack) {
