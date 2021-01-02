@@ -1,0 +1,498 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B9046AB1-1EA3-4E36-8A0B-9548152DF9AF}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PCRWeb</RootNamespace>
+    <AssemblyName>PCRWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44336</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PrincessConnectController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ButtonModel.cs" />
+    <Compile Include="Models\PrincessConnect.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\PrincessConnectDBService.cs" />
+    <Compile Include="ViewModels\PrincessConnectViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Images\七七香%28夏日%29.png" />
+    <Content Include="Images\七七香%28夏日%29選取.png" />
+    <Content Include="Images\七七香.png" />
+    <Content Include="Images\七七香選取.png" />
+    <Content Include="Images\亞里莎.png" />
+    <Content Include="Images\亞里莎選取.png" />
+    <Content Include="Images\伊緒%28夏日%29.png" />
+    <Content Include="Images\伊緒%28夏日%29選取.png" />
+    <Content Include="Images\伊緒.png" />
+    <Content Include="Images\伊緒選取.png" />
+    <Content Include="Images\伊莉亞%28聖誕節%29.png" />
+    <Content Include="Images\伊莉亞%28聖誕節%29選取.png" />
+    <Content Include="Images\伊莉亞.png" />
+    <Content Include="Images\伊莉亞選取.png" />
+    <Content Include="Images\似似花.png" />
+    <Content Include="Images\似似花選取.png" />
+    <Content Include="Images\依里%28天使%29.png" />
+    <Content Include="Images\依里%28天使%29選取.png" />
+    <Content Include="Images\依里.png" />
+    <Content Include="Images\依里選取.png" />
+    <Content Include="Images\優妮.png" />
+    <Content Include="Images\優妮選取.png" />
+    <Content Include="Images\優花梨%28聖誕節%29.png" />
+    <Content Include="Images\優花梨%28聖誕節%29選取.png" />
+    <Content Include="Images\優花梨.png" />
+    <Content Include="Images\優花梨選取.png" />
+    <Content Include="Images\優衣%28公主%29.png" />
+    <Content Include="Images\優衣%28公主%29選取.png" />
+    <Content Include="Images\優衣%28新年%29.png" />
+    <Content Include="Images\優衣%28新年%29選取.png" />
+    <Content Include="Images\優衣.png" />
+    <Content Include="Images\優衣選取.png" />
+    <Content Include="Images\克莉絲提娜%28聖誕節%29.png" />
+    <Content Include="Images\克莉絲提娜%28聖誕節%29選取.png" />
+    <Content Include="Images\克莉絲提娜.png" />
+    <Content Include="Images\克莉絲提娜選取.png" />
+    <Content Include="Images\克蘿依.png" />
+    <Content Include="Images\克蘿依選取.png" />
+    <Content Include="Images\凜.png" />
+    <Content Include="Images\凜選取.png" />
+    <Content Include="Images\凱留%28夏日%29.png" />
+    <Content Include="Images\凱留%28夏日%29選取.png" />
+    <Content Include="Images\凱留%28新年%29.png" />
+    <Content Include="Images\凱留%28新年%29選取.png" />
+    <Content Include="Images\凱留.png" />
+    <Content Include="Images\凱留選取.png" />
+    <Content Include="Images\初音%28夏日%29.png" />
+    <Content Include="Images\初音%28夏日%29選取.png" />
+    <Content Include="Images\初音.png" />
+    <Content Include="Images\初音選取.png" />
+    <Content Include="Images\千歌%28聖誕節%29.png" />
+    <Content Include="Images\千歌%28聖誕節%29選取.png" />
+    <Content Include="Images\千歌.png" />
+    <Content Include="Images\千歌選取.png" />
+    <Content Include="Images\卯月.png" />
+    <Content Include="Images\卯月選取.png" />
+    <Content Include="Images\古蕾婭.png" />
+    <Content Include="Images\古蕾婭選取.png" />
+    <Content Include="Images\可可蘿%28公主%29.png" />
+    <Content Include="Images\可可蘿%28公主%29選取.png" />
+    <Content Include="Images\可可蘿%28夏日%29.png" />
+    <Content Include="Images\可可蘿%28夏日%29選取.png" />
+    <Content Include="Images\可可蘿%28新年%29.png" />
+    <Content Include="Images\可可蘿%28新年%29選取.png" />
+    <Content Include="Images\可可蘿.png" />
+    <Content Include="Images\可可蘿選取.png" />
+    <Content Include="Images\吉塔.png" />
+    <Content Include="Images\吉塔選取.png" />
+    <Content Include="Images\咲戀%28夏日%29.png" />
+    <Content Include="Images\咲戀%28夏日%29選取.png" />
+    <Content Include="Images\咲戀.png" />
+    <Content Include="Images\咲戀選取.png" />
+    <Content Include="Images\嘉夜.png" />
+    <Content Include="Images\嘉夜選取.png" />
+    <Content Include="Images\妮諾%28大江戶%29.png" />
+    <Content Include="Images\妮諾%28大江戶%29選取.png" />
+    <Content Include="Images\妮諾.png" />
+    <Content Include="Images\妮諾選取.png" />
+    <Content Include="Images\安.png" />
+    <Content Include="Images\安選取.png" />
+    <Content Include="Images\宮子%28萬聖節%29.png" />
+    <Content Include="Images\宮子%28萬聖節%29選取.png" />
+    <Content Include="Images\宮子.png" />
+    <Content Include="Images\宮子選取.png" />
+    <Content Include="Images\忍%28萬聖節%29.png" />
+    <Content Include="Images\忍%28萬聖節%29選取.png" />
+    <Content Include="Images\忍.png" />
+    <Content Include="Images\忍選取.png" />
+    <Content Include="Images\怜%28新年%29.png" />
+    <Content Include="Images\怜%28新年%29選取.png" />
+    <Content Include="Images\怜%28萬聖節%29.png" />
+    <Content Include="Images\怜%28萬聖節%29選取.png" />
+    <Content Include="Images\怜.png" />
+    <Content Include="Images\怜選取.png" />
+    <Content Include="Images\惠理子%28情人節%29.png" />
+    <Content Include="Images\惠理子%28情人節%29選取.png" />
+    <Content Include="Images\惠理子.png" />
+    <Content Include="Images\惠理子選取.png" />
+    <Content Include="Images\愛蜜莉雅.png" />
+    <Content Include="Images\愛蜜莉雅選取.png" />
+    <Content Include="Images\拉姆.png" />
+    <Content Include="Images\拉姆選取.png" />
+    <Content Include="Images\拉比林斯達.png" />
+    <Content Include="Images\拉比林斯達選取.png" />
+    <Content Include="Images\日和%28新年%29.png" />
+    <Content Include="Images\日和%28新年%29選取.png" />
+    <Content Include="Images\日和.png" />
+    <Content Include="Images\日和選取.png" />
+    <Content Include="Images\智%28魔法少女%29.png" />
+    <Content Include="Images\智%28魔法少女%29選取.png" />
+    <Content Include="Images\智.png" />
+    <Content Include="Images\智選取.png" />
+    <Content Include="Images\望%28聖誕節%29.png" />
+    <Content Include="Images\望%28聖誕節%29選取.png" />
+    <Content Include="Images\望.png" />
+    <Content Include="Images\望選取.png" />
+    <Content Include="Images\未央.png" />
+    <Content Include="Images\未央選取.png" />
+    <Content Include="Images\杏奈%28夏日%29.png" />
+    <Content Include="Images\杏奈%28夏日%29選取.png" />
+    <Content Include="Images\杏奈.png" />
+    <Content Include="Images\杏奈選取.png" />
+    <Content Include="Images\栞%28魔法少女%29.png" />
+    <Content Include="Images\栞%28魔法少女%29選取.png" />
+    <Content Include="Images\栞.png" />
+    <Content Include="Images\栞選取.png" />
+    <Content Include="Images\步未%28奇幻%29.png" />
+    <Content Include="Images\步未%28奇幻%29選取.png" />
+    <Content Include="Images\步未.png" />
+    <Content Include="Images\步未選取.png" />
+    <Content Include="Images\流夏%28夏日%29.png" />
+    <Content Include="Images\流夏%28夏日%29選取.png" />
+    <Content Include="Images\流夏.png" />
+    <Content Include="Images\流夏選取.png" />
+    <Content Include="Images\深月.png" />
+    <Content Include="Images\深月選取.png" />
+    <Content Include="Images\珠希%28夏日%29.png" />
+    <Content Include="Images\珠希%28夏日%29選取.png" />
+    <Content Include="Images\珠希.png" />
+    <Content Include="Images\珠希選取.png" />
+    <Content Include="Images\琪愛兒.png" />
+    <Content Include="Images\琪愛兒選取.png" />
+    <Content Include="Images\璃乃%28奇幻%29.png" />
+    <Content Include="Images\璃乃%28奇幻%29選取.png" />
+    <Content Include="Images\璃乃.png" />
+    <Content Include="Images\璃乃選取.png" />
+    <Content Include="Images\真步%28夏日%29.png" />
+    <Content Include="Images\真步%28夏日%29選取.png" />
+    <Content Include="Images\真步.png" />
+    <Content Include="Images\真步選取.png" />
+    <Content Include="Images\真琴%28夏日%29.png" />
+    <Content Include="Images\真琴%28夏日%29選取.png" />
+    <Content Include="Images\真琴.png" />
+    <Content Include="Images\真琴選取.png" />
+    <Content Include="Images\真陽%28遊俠%29.png" />
+    <Content Include="Images\真陽%28遊俠%29選取.png" />
+    <Content Include="Images\真陽.png" />
+    <Content Include="Images\真陽選取.png" />
+    <Content Include="Images\矛依未.png" />
+    <Content Include="Images\矛依未選取.png" />
+    <Content Include="Images\碧%28插班生%29.png" />
+    <Content Include="Images\碧%28插班生%29選取.png" />
+    <Content Include="Images\碧.png" />
+    <Content Include="Images\碧選取.png" />
+    <Content Include="Images\祈梨.png" />
+    <Content Include="Images\祈梨選取.png" />
+    <Content Include="Images\秋乃%28聖誕節%29.png" />
+    <Content Include="Images\秋乃%28聖誕節%29選取.png" />
+    <Content Include="Images\秋乃.png" />
+    <Content Include="Images\秋乃選取.png" />
+    <Content Include="Images\空花%28大江戶%29.png" />
+    <Content Include="Images\空花%28大江戶%29選取.png" />
+    <Content Include="Images\空花.png" />
+    <Content Include="Images\空花選取.png" />
+    <Content Include="Images\純%28夏日%29.png" />
+    <Content Include="Images\純%28夏日%29選取.png" />
+    <Content Include="Images\純.png" />
+    <Content Include="Images\純選取.png" />
+    <Content Include="Images\紡希%28萬聖節%29.png" />
+    <Content Include="Images\紡希%28萬聖節%29選取.png" />
+    <Content Include="Images\紡希.png" />
+    <Content Include="Images\紡希選取.png" />
+    <Content Include="Images\綾音%28聖誕節%29.png" />
+    <Content Include="Images\綾音%28聖誕節%29選取.png" />
+    <Content Include="Images\綾音.png" />
+    <Content Include="Images\綾音選取.png" />
+    <Content Include="Images\美冬%28夏日%29.png" />
+    <Content Include="Images\美冬%28夏日%29選取.png" />
+    <Content Include="Images\美冬.png" />
+    <Content Include="Images\美冬選取.png" />
+    <Content Include="Images\美咲%28萬聖節%29.png" />
+    <Content Include="Images\美咲%28萬聖節%29選取.png" />
+    <Content Include="Images\美咲.png" />
+    <Content Include="Images\美咲選取.png" />
+    <Content Include="Images\美美%28萬聖節%29.png" />
+    <Content Include="Images\美美%28萬聖節%29選取.png" />
+    <Content Include="Images\美美.png" />
+    <Content Include="Images\美美選取.png" />
+    <Content Include="Images\美里%28夏日%29.png" />
+    <Content Include="Images\美里%28夏日%29選取.png" />
+    <Content Include="Images\美里.png" />
+    <Content Include="Images\美里選取.png" />
+    <Content Include="Images\胡桃%28聖誕節%29.png" />
+    <Content Include="Images\胡桃%28聖誕節%29選取.png" />
+    <Content Include="Images\胡桃.png" />
+    <Content Include="Images\胡桃選取.png" />
+    <Content Include="Images\茉莉%28萬聖節%29.png" />
+    <Content Include="Images\茉莉%28萬聖節%29選取.png" />
+    <Content Include="Images\茉莉.png" />
+    <Content Include="Images\茉莉選取.png" />
+    <Content Include="Images\茜里%28天使%29.png" />
+    <Content Include="Images\茜里%28天使%29選取.png" />
+    <Content Include="Images\茜里.png" />
+    <Content Include="Images\茜里選取.png" />
+    <Content Include="Images\莉馬.png" />
+    <Content Include="Images\莉馬選取.png" />
+    <Content Include="Images\莫妮卡%28魔法少女%29.png" />
+    <Content Include="Images\莫妮卡%28魔法少女%29選取.png" />
+    <Content Include="Images\莫妮卡.png" />
+    <Content Include="Images\莫妮卡選取.png" />
+    <Content Include="Images\褉%28萬聖節%29.png" />
+    <Content Include="Images\褉%28萬聖節%29選取.png" />
+    <Content Include="Images\褉.png" />
+    <Content Include="Images\褉選取.png" />
+    <Content Include="Images\貪吃佩可%28夏日%29.png" />
+    <Content Include="Images\貪吃佩可%28夏日%29選取.png" />
+    <Content Include="Images\貪吃佩可.png" />
+    <Content Include="Images\貪吃佩可選取.png" />
+    <Content Include="Images\鈴%28遊俠%29.png" />
+    <Content Include="Images\鈴%28遊俠%29選取.png" />
+    <Content Include="Images\鈴.png" />
+    <Content Include="Images\鈴奈%28夏日%29.png" />
+    <Content Include="Images\鈴奈%28夏日%29選取.png" />
+    <Content Include="Images\鈴奈.png" />
+    <Content Include="Images\鈴奈選取.png" />
+    <Content Include="Images\鈴莓%28夏日%29.png" />
+    <Content Include="Images\鈴莓%28夏日%29選取.png" />
+    <Content Include="Images\鈴莓%28新年%29.png" />
+    <Content Include="Images\鈴莓%28新年%29選取.png" />
+    <Content Include="Images\鈴莓.png" />
+    <Content Include="Images\鈴莓選取.png" />
+    <Content Include="Images\鈴選取.png" />
+    <Content Include="Images\FES貪吃佩可.png" />
+    <Content Include="Images\FES貪吃佩可選取.png" />
+    <Content Include="Images\鏡華%28萬聖節%29.png" />
+    <Content Include="Images\鏡華%28萬聖節%29選取.png" />
+    <Content Include="Images\鏡華.png" />
+    <Content Include="Images\鏡華選取.png" />
+    <Content Include="Images\雪.png" />
+    <Content Include="Images\雪選取.png" />
+    <Content Include="Images\雷姆.png" />
+    <Content Include="Images\雷姆選取.png" />
+    <Content Include="Images\霞%28魔法少女%29.png" />
+    <Content Include="Images\霞%28魔法少女%29選取.png" />
+    <Content Include="Images\霞.png" />
+    <Content Include="Images\霞選取.png" />
+    <Content Include="Images\露.png" />
+    <Content Include="Images\露娜.png" />
+    <Content Include="Images\露娜選取.png" />
+    <Content Include="Images\露選取.png" />
+    <Content Include="Images\靜流%28情人節%29.png" />
+    <Content Include="Images\靜流%28情人節%29選取.png" />
+    <Content Include="Images\靜流.png" />
+    <Content Include="Images\靜流選取.png" />
+    <Content Include="Images\香織%28夏日%29.png" />
+    <Content Include="Images\香織%28夏日%29選取.png" />
+    <Content Include="Images\香織.png" />
+    <Content Include="Images\香織選取.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\PrincessConnect\Create.cshtml" />
+    <Content Include="Views\PrincessConnect\Edit.cshtml" />
+    <Content Include="Views\PrincessConnect\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="packages.config" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>63019</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44336/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>此專案參考這部電腦上所缺少的 NuGet 套件。請啟用 NuGet 套件還原，以下載該套件。如需詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的檔案是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

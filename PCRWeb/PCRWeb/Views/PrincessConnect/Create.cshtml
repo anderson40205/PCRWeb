@@ -1,0 +1,101 @@
+﻿@model PCRWeb.Models.PrincessConnect
+@{
+    ViewBag.Title = "Index";//顯示標題用
+    var allRoleList = ViewBag.List;
+}
+@*建立新增資料所需的表單*@
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+@for (int i = 0; i < 134; i++)
+{
+    <button type="submit" id="@i" onclick="clickImageBolder(@(i))" style="width: 60px; height: 60px; border:none;"><img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px; border:none;" /></button>
+}
+<input type="button" value="進攻" onclick="clickLink('attack')" />
+<input type="button" value="防守" onclick="clickLink('defense')" />
+<script type="text/javascript">
+    let isAttack = true;
+    let isSelect = true;
+    var pcrState = [];
+    for (var i = 0; i < 134; i++) {
+        pcrState.push(true);
+    }
+    function clickImageBolder(number) {
+        if (pcrState[number]) {
+            document.getElementById(number).style = "color:blue; border: solid 2px ; width: 60px; height: 60px;";
+            pcrState[number] = !pcrState[number];
+        }
+        else {
+            document.getElementById(number).style = "border:none;width: 60px; height: 60px;";
+            pcrState[number] = !pcrState[number];
+        }
+    }
+    function clickLink(value) {
+        if (isAttack) {
+            document.getElementById("CreateData").style = "display:block; position: absolute; border: soli 5px; top: 100px;";
+            isAttack = !isAttack;
+        }
+        else {
+            document.getElementById("CreateData").style = "display:None;";
+        }
+    }
+</script>
+@*
+        <div id="CreateData" style="display:none">
+        <h3>新增</h3>
+        @using (Html.BeginForm("HandleCreateButtonClick", "PrincessConnect"))
+        {
+            for (int i = 0; i < 134; i++)
+            {
+                if (ViewBag.total == 5 && !ViewBag.pcrState[i])
+                {
+                    <button type="submit" name="stateId" value=@i id=@allRoleList[i] disabled><img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" /></button>
+                }
+                else
+                {
+                    <button type="submit" name="stateId" value=@i id=@allRoleList[i]>
+                        @if (ViewBag.pcrState[i] && ViewBag.total <= 5)
+                        {
+                            <img src="~/Images/@(allRoleList[i])選取.png" style="width: 50px; height: 50px;" />
+                        }
+                        else if (ViewBag.total != 0)
+                        {
+                            <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" />
+                        }
+                        else
+                        {
+                            <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" />
+                        }
+                    </button>
+                }
+            }
+        }
+    </div>
+
+    @using (Html.BeginForm("Create", "PrincessConnect", FormMethod.Get))
+    {
+        <table>
+            <tr>
+                <td>
+                    您所選擇的角色為:@ViewBag.allName
+                </td>
+            </tr>
+        </table>
+    }
+*@
+
+@using (Html.BeginForm("Create", "PrincessConnect"))
+{
+    <h3>新增留言</h3>
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.a1)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.a2)
+                @Html.ValidationMessageFor(model => model.a3)
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="新增留言" />
+}
+

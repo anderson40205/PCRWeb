@@ -1,0 +1,56 @@
+﻿@model PCRWeb.ViewModels.PrincessConnectViewModel
+@{
+    ViewBag.Title = "Index";//顯示標題用
+    var allRoleList = ViewBag.List;
+}
+@*載入新增留言頁面*@
+<div id="CreateData">
+    <h3>查詢進攻隊伍，請選擇防禦陣形的五個角色</h3>
+    @using (Html.BeginForm("HandleButtonClick", "PrincessConnect"))
+    {
+        for (int i = 0; i < 134; i++)
+        {
+            if (ViewBag.total == 5 && !ViewBag.pcrState[i])
+            {
+                <button type="submit" name="stateId" value=@i id=@allRoleList[i] disabled><img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" /></button>
+            }
+            else
+            {
+                <button type="submit" name="stateId" value=@i id=@allRoleList[i]>
+                    @if (ViewBag.pcrState[i] && ViewBag.total <= 5)
+                    {
+                        <img src="~/Images/@(allRoleList[i])選取.png" style="width: 50px; height: 50px;" />
+                    }
+                    else if (ViewBag.total != 0)
+                    {
+                        <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" />
+                    }
+                    else
+                    {
+                        <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" />
+                    }
+                </button>
+            }
+        }
+    }
+</div>
+@using (Html.BeginForm("Index", "PrincessConnect", FormMethod.Get))
+{
+    <table>
+        <tr>
+            <td>
+                <input type="submit" value="查詢" />
+            </td>
+            <td>
+                您所選擇的角色為:@ViewBag.allName
+            </td>
+        </tr>
+    </table>
+}
+<div>
+    @Html.ActionLink("發布攻略", "Create")
+</div>
+@*匯入驗證欄位所需的JavaScript*@
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
