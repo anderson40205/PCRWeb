@@ -83,7 +83,9 @@ namespace PCRWeb.Service
         #region 新增資料
         public void InsertPrincessConnectTen(PrincessConnectViewModel newData)
         {
-            string sql = $@" INSERT INTO PrincessConnect(a1,a2,a3,a4,a5,d1,d2,d3,d4,d5) VALUES( '{newData.a1}','{newData.a2}','{newData.a3}','{newData.a4}','{newData.a5}','{newData.d1}','{newData.d2}','{newData.d3}','{newData.d4}','{newData.d5}' ); ";
+            string sql = $@" INSERT INTO PrincessConnect(Content,a1,a2,a3,a4,a5,d1,d2,d3,d4,d5,positive,negative,DTRecord) VALUES( N'{newData.content}',
+            N'{newData.a1}',N'{newData.a2}',N'{newData.a3}',N'{newData.a4}',N'{newData.a5}',N'{newData.d1}',N'{newData.d2}',N'{newData.d3}',
+            N'{newData.d4}',N'{newData.d5}','{null}','{null}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' ); ";
             try
             {
                 conn.Open();

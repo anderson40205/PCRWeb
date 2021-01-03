@@ -12,6 +12,7 @@ namespace PCRWeb.ViewModels
         public bool State { get; set; }
         [DisplayName("搜尋:")]
         public string Search { get; set; }
+        public string content { get; set; }
         public string d1 { get; set; }
         public string d2 { get; set; }
         public string d3 { get; set; }

@@ -166,11 +166,7 @@ namespace PCRWeb.Controllers
         public ActionResult Create(PrincessConnectViewModel p)
         {
             PrincessConnectDBService.InsertPrincessConnectTen(p);
-            if (ModelState.IsValid)
-            {
-                return RedirectToAction("Test");
-            }
-            return View();
+            return Redirect("Create");
         }
 
         #region 修改留言

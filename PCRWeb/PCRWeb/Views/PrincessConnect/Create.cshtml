@@ -1,36 +1,55 @@
-﻿@model PCRWeb.Models.PrincessConnect
+﻿@model PCRWeb.ViewModels.PrincessConnectViewModel
 @{
     ViewBag.Title = "Index";//顯示標題用
     var allRoleList = ViewBag.List;
 }
+<body background="~/Images/競技場.png" style="background-size: cover; margin: 0; "></body>
+<input type="button" value="清除全部" onclick="clickAllClear()" style="background: rgba(255,255,255,0.5);" />
+<input type="button" value="新增進攻" onclick="clickLink('attack')" style="background: rgba(255,255,255,0.5);"/>
+<input type="button" value="新增防守" onclick="clickLink('defense')" style="background: rgba(255,255,255,0.5);"/>
+<br>
 @*建立新增資料所需的表單*@
-@for (int i = 0; i < 134; i++)
-{
-    <button type="submit" id="@i" onclick="clickImageBolder(@(i))" style="width: 70px; height: 70px; border:none;">
-    <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px; border:none;" />
-    </button>
-}
-<input type="button" value="進攻" onclick="clickLink('attack')" />
-@*
-    display TODO
-*@
-<input type="button" value="防守" onclick="clickLink('defense')" />
+<div id="Attack">
+    @for (int i = 0; i < 134; i++)
+    {
+        <button type="submit" id="@i" value="@(allRoleList[i])" onclick="clickImageBolder(@(i))" style="width: 70px; height: 70px; border:none; background-color:transparent;">
+            <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px; border:none;" />
+        </button>
+    }
+</div>
 <script type="text/javascript">
+    let fiveCount = 0;
+    let Role = [];
     let roleCount = 134;
-    let isAttack = true;
-    let isSelect = true;
     let falseCount = 0;
     var pcrState = [];
+    let allRoleName = "";
+    let a1 = ""; let a2 = ""; let a3 = ""; let a4 = ""; let a5 = "";
+    let d1 = ""; let d2 = ""; let d3 = ""; let d4 = ""; let d5 = "";
+    let Note = "";
     for (var i = 0; i < roleCount; i++) {
         pcrState.push(true);
     }
+
+    function clickAllClear() {
+        falseCount = 0;
+        //document.getElementById('ARN').innerHTML = "";
+        allRoleName = "";
+        for (var i = 0; i < roleCount; i++) {
+            pcrState[i] = true;
+            document.getElementById(i).style = "border:none; width: 70px; height: 70px;background-color:transparent;";
+            document.getElementById(i).removeAttribute("disabled");
+        }
+    }
+
     function clickImageBolder(number) {
+        falseCount = 0;
         if (pcrState[number]) {
-            document.getElementById(number).style = "color:blue; border: solid 4px ; width: 70px; height: 70px;";
+            document.getElementById(number).style = "color:blue; border: solid 4px ; width: 70px; height: 70px;background-color:transparent;";
             pcrState[number] = !pcrState[number];
         }
         else {
-            document.getElementById(number).style = "border:none;width: 70px; height: 70px;";
+            document.getElementById(number).style = "border:none;width: 70px; height: 70px;background-color:transparent;";
             pcrState[number] = !pcrState[number];
         }
         for (var i = 0; i < roleCount; i++) {
@@ -38,12 +57,11 @@
                 falseCount++;
             }
         }
-        console.log("FC" + falseCount);
+
         if (falseCount == 5) {
             for (var i = 0; i < roleCount; i++) {
                 if (pcrState[i] == true) {
                     document.getElementById(i).setAttribute("disabled", "disabled");
-                    console.log("有進判斷" + falseCount);
                 }
             }
         }
@@ -51,80 +69,127 @@
             for (var i = 0; i < roleCount; i++) {
                 if (pcrState[i] == true) {
                     document.getElementById(i).removeAttribute("disabled");
-                    console.log("有進判斷" + falseCount);
                 }
             }
         }
+        for (var i = 0; i < roleCount; i++) {
+            if (pcrState[i] == false) {
+                allRoleName += document.getElementById(i).value + " ";
+            }
+        }
+        //document.getElementById('ARN').innerHTML = allRoleName;
+        allRoleName = "";
         falseCount = 0;
     }
     function clickLink(value) {
-        if (isAttack) {
-            document.getElementById("CreateData").style = "display:block; position: absolute; border: soli 5px; top: 100px;";
-            isAttack = !isAttack;
+
+        if (value == "attack") {
+            attackClear();
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    Role.push(document.getElementById(i).value);
+                }
+            }
+            fiveCount = 0;
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    var obj = document.getElementById("ai" + fiveCount);
+                    obj.setAttribute("src", "../Images/" + Role[fiveCount] + ".png");//不能用~/Imges
+                    fiveCount++;
+                }
+            }
+            a1 = Role[0]; a2 = Role[1]; a3 = Role[2]; a4 = Role[3]; a5 = Role[4];
         }
-        else {
-            document.getElementById("CreateData").style = "display:None;";
+        if (value == "defense") {
+            defenseClear();
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    Role.push(document.getElementById(i).value);
+                }
+            }
+            fiveCount = 0;
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    var obj = document.getElementById("di" + fiveCount);
+                    obj.setAttribute("src", "../Images/" + Role[fiveCount] + ".png");//不能用~/Imges
+                    fiveCount++;
+                }
+            }
+            d1 = Role[0]; d2 = Role[1]; d3 = Role[2]; d4 = Role[3]; d5 = Role[4];
+        }
+        console.log("AD:" + a1 + " " + a2 + " " + a3 + " " + a4 + " " + a5 + " // " + d1 + " " + d2 + " " + d3 + " " + d4 + " " + d5 + " ");
+    }
+    function submitForm() {
+        var model = new Object();
+        Note = document.getElementById("submitNote").value;
+        model.a1 = a1; model.d1 = d1;
+        model.a2 = a2; model.d2 = d2;
+        model.a3 = a3; model.d3 = d3;
+        model.a4 = a4; model.d4 = d4;
+        model.a5 = a5; model.d5 = d5;
+        model.content = Note;
+        jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("Create")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ p: model }),
+            success: function (data) {
+                alert(data);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function attackClear() {
+        Role = [];
+        fiveCount = 0;
+        for (var i = 0; i < 5; i++) {
+            document.getElementById("ai" + i).removeAttribute("src");
+        }
+    }
+    function defenseClear() {
+        Role = [];
+        fiveCount = 0;
+        for (var i = 0; i < 5; i++) {
+            document.getElementById("di" + i).removeAttribute("src");
         }
     }
 </script>
-@*
-        <div id="CreateData" style="display:none">
-        <h3>新增</h3>
-        @using (Html.BeginForm("HandleCreateButtonClick", "PrincessConnect"))
-        {
-            for (int i = 0; i < 134; i++)
-            {
-                if (ViewBag.total == 5 && !ViewBag.pcrState[i])
-                {
-                    <button type="submit" name="stateId" value=@i id=@allRoleList[i] disabled><img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" /></button>
-                }
-                else
-                {
-                    <button type="submit" name="stateId" value=@i id=@allRoleList[i]>
-                        @if (ViewBag.pcrState[i] && ViewBag.total <= 5)
-                        {
-                            <img src="~/Images/@(allRoleList[i])選取.png" style="width: 50px; height: 50px;" />
-                        }
-                        else if (ViewBag.total != 0)
-                        {
-                            <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" />
-                        }
-                        else
-                        {
-                            <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" />
-                        }
-                    </button>
-                }
-            }
-        }
-    </div>
 
-    @using (Html.BeginForm("Create", "PrincessConnect", FormMethod.Get))
-    {
-        <table>
-            <tr>
-                <td>
-                    您所選擇的角色為:@ViewBag.allName
-                </td>
-            </tr>
-        </table>
-    }
-*@
+<br>
+<table style="background-color:lightgray; background:rgba(255,255,255,0.5);">
+    <tr>
+        <td>
+            &nbsp;&nbsp;&nbsp;
+            進攻:
+            <img id="ai0" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai1" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai2" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai3" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai4" style="width: 50px; height: 50px; border:none;" />
+        </td>
 
-@using (Html.BeginForm("Create", "PrincessConnect"))
-{
-    <h3>新增留言</h3>
-    <table>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.a1)
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.a2)
-                @Html.ValidationMessageFor(model => model.a3)
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="新增留言" />
-}
-
+        <td>
+            &nbsp;&nbsp;&nbsp;
+            防守:
+            <img id="di0" style="width: 50px; height: 50px; border:none;" />
+            <img id="di1" style="width: 50px; height: 50px; border:none;" />
+            <img id="di2" style="width: 50px; height: 50px; border:none;" />
+            <img id="di3" style="width: 50px; height: 50px; border:none;" />
+            <img id="di4" style="width: 50px; height: 50px; border:none;" />
+        </td>
+    </tr>
+</table>
+<br>
+<span style="background: rgba(255,255,255,0.5); font-size:17px;">
+    備註:
+</span>
+<br>
+<textarea id="submitNote" style=" border: solid 1px #DDD;background-color:lightgray;
+ background: rgba(255,255,255,0.5);width: 100%;padding: 2px 4px;border-radius: 0.5em;resize: vertical;
+ box-sizing: border-box;"></textarea>
+<input type="button" value="新增送出" onclick="submitForm()" style="background: rgba(255,255,255,0.5);"/>
