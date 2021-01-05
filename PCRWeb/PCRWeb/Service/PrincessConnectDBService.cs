@@ -83,9 +83,12 @@ namespace PCRWeb.Service
         #region 新增資料
         public void InsertPrincessConnectTen(PrincessConnect newData)
         {
+            if (newData.Content == "" || newData.Content == null)
+                newData.Content = "";
+
             string sql = $@" INSERT INTO PrincessConnect(Content,a1,a2,a3,a4,a5,d1,d2,d3,d4,d5,positive,negative,DTRecord) VALUES( N'{newData.Content}',
             N'{newData.a1}',N'{newData.a2}',N'{newData.a3}',N'{newData.a4}',N'{newData.a5}',N'{newData.d1}',N'{newData.d2}',N'{newData.d3}',
-            N'{newData.d4}',N'{newData.d5}','{null}','{null}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' ); ";
+            N'{newData.d4}',N'{newData.d5}','{0}','{0}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' ); ";
             try
             {
                 conn.Open();
@@ -138,6 +141,7 @@ namespace PCRWeb.Service
                 while(dr.Read())
                 {
                     PrincessConnect Data = new PrincessConnect();
+                    Data.Id = Convert.ToInt32(dr["Id"]);
                     Data.a1 = dr["a1"].ToString(); Data.a2 = dr["a2"].ToString(); Data.a3 = dr["a3"].ToString(); Data.a4 = dr["a4"].ToString(); Data.a5 = dr["a5"].ToString();
                     Data.d1 = dr["d1"].ToString(); Data.d2 = dr["d2"].ToString(); Data.d3 = dr["d3"].ToString(); Data.d4 = dr["d4"].ToString(); Data.d5 = dr["d5"].ToString();
                     Data.insertTime = Convert.ToDateTime(dr["DTRecord"]); Data.Content = dr["Content"].ToString();
