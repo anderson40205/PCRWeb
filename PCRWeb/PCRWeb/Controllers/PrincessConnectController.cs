@@ -13,13 +13,13 @@ namespace PCRWeb.Controllers
     {
         // GET: PrincessConnect
         private readonly PrincessConnectDBService PrincessConnectDBService = new PrincessConnectDBService();
-        public List<PrincessConnect> DataList { get; set; }
+        public List<PrincessConnectViewModel> DataList { get; set; }
         static List<bool> pcrState = new List<bool>();//加static才能宣告程全域
         static PrincessConnectViewModel Data = new PrincessConnectViewModel();
         static List<String> allRoleList = new List<String>();
         static int total = 0;
         static int selectId = 0;
-        public ActionResult Index(string Search, string s1)
+        public ActionResult Index()
         {
             var pcrList = new PrincessConnect[]{
             //--------------------------------------------------------------前衛----------------------------------------------------------------------
@@ -75,20 +75,15 @@ namespace PCRWeb.Controllers
             ViewBag.pcrState = pcrState;
             ViewBag.total = total;
             ViewBag.allName = allName;
-            Data.Search = Search;
-            Data.DataList = PrincessConnectDBService.GetDataList(Data.Search);
-            return View(Data);
+            PrincessConnect temp = new PrincessConnect();
+            temp.a1 = ""; temp.a2 = ""; temp.a3 = ""; temp.a4 = ""; temp.a5 = "";
+            temp.d1 = ""; temp.d2 = ""; temp.d3 = ""; temp.d4 = ""; temp.d5 = "";
+            temp.Content = "";temp.positive = 0;temp.negative = 0;
+            
+            return View();
         }
-        public ActionResult HandleButtonClick(int stateId)//stateId就是button屬性的value
+        public ActionResult HandleButtonClick()//stateId就是button屬性的value
         {
-            pcrState[stateId] = !pcrState[stateId];
-            if (pcrState[stateId])
-                total++;
-            else
-                total--;
-
-            selectId = stateId;
-            //return RedirectToAction("Index");
             return Redirect("Index");
         }
         public ActionResult HandleCreateButtonClick(int stateId)//stateId就是button屬性的value
@@ -160,15 +155,23 @@ namespace PCRWeb.Controllers
             ViewBag.pcrState = pcrState;
             ViewBag.total = total;
             ViewBag.allName = allName;
+            
             return View();
         }
         [HttpPost]
-        public ActionResult Create(PrincessConnectViewModel p)
+        public ActionResult Create(PrincessConnect p)
         {
             PrincessConnectDBService.InsertPrincessConnectTen(p);
             return Redirect("Create");
         }
-
+        [HttpPost]
+        public ActionResult Search(PrincessConnect p)
+        {
+            PrincessConnectViewModel receiveSearch = new PrincessConnectViewModel();
+            receiveSearch.dataList = PrincessConnectDBService.SearchDefense(p);
+            
+            return View("Index", receiveSearch);
+        }
         #region 修改留言
         //修改留言頁面要根據傳入編號來決定要修改的資料
         public ActionResult Edit(int Id)

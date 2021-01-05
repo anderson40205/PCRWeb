@@ -26,7 +26,11 @@ namespace PCRWeb.Models
         public string a3 { get; set; }
         public string a4 { get; set; }
         public string a5 { get; set; }
+        public DateTime? insertTime { get; set; }//? 代表可以null
         public string Name { get; set; }
-        public int cid { get; set; }
+        public string Content{ get; set; }
+        public int positive { get; set; }
+        public int negative { get; set; }
+        
     }
 }

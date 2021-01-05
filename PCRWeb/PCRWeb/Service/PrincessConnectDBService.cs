@@ -81,9 +81,9 @@ namespace PCRWeb.Service
             return DataList;
         }
         #region 新增資料
-        public void InsertPrincessConnectTen(PrincessConnectViewModel newData)
+        public void InsertPrincessConnectTen(PrincessConnect newData)
         {
-            string sql = $@" INSERT INTO PrincessConnect(Content,a1,a2,a3,a4,a5,d1,d2,d3,d4,d5,positive,negative,DTRecord) VALUES( N'{newData.content}',
+            string sql = $@" INSERT INTO PrincessConnect(Content,a1,a2,a3,a4,a5,d1,d2,d3,d4,d5,positive,negative,DTRecord) VALUES( N'{newData.Content}',
             N'{newData.a1}',N'{newData.a2}',N'{newData.a3}',N'{newData.a4}',N'{newData.a5}',N'{newData.d1}',N'{newData.d2}',N'{newData.d3}',
             N'{newData.d4}',N'{newData.d5}','{null}','{null}','{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}' ); ";
             try
@@ -124,6 +124,37 @@ namespace PCRWeb.Service
                 conn.Close();
             }
             return Data;
+        }
+        public List<PrincessConnect> SearchDefense(PrincessConnect d)
+        {
+            List<PrincessConnect> dataList = new List<PrincessConnect>();
+            string sql = $@" SELECT * FROM PrincessConnect WHERE d1 = N'{d.d1}' AND d2='{d.d2}' AND d3='{d.d3}' AND d4='{d.d4}' AND d5='{d.d5}' ";
+            try
+            {
+                conn.Open();//開啟DB連線
+                SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql資料
+                SqlDataReader dr = cmd.ExecuteReader();
+                //SqlDataReader 的預設位置是在第一筆記錄之前。 因此，您必須呼叫 Read 才能開始存取任何資料。
+                while(dr.Read())
+                {
+                    PrincessConnect Data = new PrincessConnect();
+                    Data.a1 = dr["a1"].ToString(); Data.a2 = dr["a2"].ToString(); Data.a3 = dr["a3"].ToString(); Data.a4 = dr["a4"].ToString(); Data.a5 = dr["a5"].ToString();
+                    Data.d1 = dr["d1"].ToString(); Data.d2 = dr["d2"].ToString(); Data.d3 = dr["d3"].ToString(); Data.d4 = dr["d4"].ToString(); Data.d5 = dr["d5"].ToString();
+                    Data.insertTime = Convert.ToDateTime(dr["DTRecord"]); Data.Content = dr["Content"].ToString();
+                    Data.positive = Convert.ToInt32(dr["positive"]); Data.negative = Convert.ToInt32(dr["negative"]);
+                    dataList.Add(Data);
+                }
+                
+            }
+            catch (Exception s)
+            {
+                Console.WriteLine(s.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return dataList;
         }
         #region 修改留言
         public void UpdatePrincessConnect(PrincessConnect UpdateData)
