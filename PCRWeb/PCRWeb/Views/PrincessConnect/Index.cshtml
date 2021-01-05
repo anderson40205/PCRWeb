@@ -3,6 +3,7 @@
     ViewBag.Title = "Index";//顯示標題用
     var allRoleList = ViewBag.List;
 }
+<head><script src="https://code.jquery.com/jquery-3.5.1.min.js"></script></head>
 <body background="~/Images/競技場.png" style="background-size: cover; margin: 0; ">
 </body>
 <input id="isHide" type="submit" value="展開" onclick="hide()" />
@@ -28,6 +29,11 @@
     let d1 = ""; let d2 = ""; let d3 = ""; let d4 = ""; let d5 = "";
     let Note = "";
     let hideToggle = true;
+    let queryView = [];
+    let a1View = []; let a2View = []; let a3View = []; let a4View = []; let a5View = [];
+    let d1View = []; let d2View = []; let d3View = []; let d4View = []; let d5View = [];
+    let contentView = []; let insertTimeView = []; let positiveView = []; let negativeView = [];
+    let queryCount = 0;
     for (var i = 0; i < roleCount; i++) {
         pcrState.push(true);
     }
@@ -55,6 +61,7 @@
         }
         hide();
         d1 = Role[0]; d2 = Role[1]; d3 = Role[2]; d4 = Role[3]; d5 = Role[4];
+        console.log("防守確認:" + d1 + d2 + d3 + d4 + d5);
     }
     function hide() {
         hideToggle = !hideToggle;
@@ -121,18 +128,12 @@
                 allRoleName += document.getElementById(i).value + " ";
             }
         }
-        //document.getElementById('ARN').innerHTML = allRoleName;
         allRoleName = "";
         falseCount = 0;
     }
 
-    function submitForm() {
-        var model = new Object();
-        model.d1 = d1;
-        model.d2 = d2;
-        model.d3 = d3;
-        model.d4 = d4;
-        model.d5 = d5;
+    @*function submitForm() {
+
         jQuery.ajax({
             type: "POST",
             url: "@Url.Action("Search")",
@@ -146,7 +147,51 @@
                 alert(errMsg);
             }
         });
-    }
+    }*@
+
+    function submitForm() {
+        var model = new Object();
+        model.d1 = d1;
+        model.d2 = d2;
+        model.d3 = d3;
+        model.d4 = d4;
+        model.d5 = d5;
+        jQuery.ajax({
+            url: '@Url.Action("Search", "PrincessConnect")',
+            data: { "p": model }, // 變數名稱必須跟Action裡的相同
+            cache: false,
+            type: "POST",
+            success: function (data, textStatus, jqXHR) {
+                var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
+                $.each(obj1.dataList, function (i, obj2) {
+                    queryCount++;
+                    console.log("i:" + i + "輸出:" + obj1.dataList[i]["a2"]);
+                    a1View.push(obj1.dataList[i]["a1"]); a2View.push(obj1.dataList[i]["a2"]); a3View.push(obj1.dataList[i]["a3"]); a4View.push(obj1.dataList[i]["a4"]); a5View.push(obj1.dataList[i]["a5"]);
+                    d1View.push(obj1.dataList[i]["d1"]); d2View.push(obj1.dataList[i]["d2"]); d3View.push(obj1.dataList[i]["d3"]); d4View.push(obj1.dataList[i]["d4"]); d5View.push(obj1.dataList[i]["d5"]);
+                    insertTimeView.push(obj1.dataList[i]["insertTime"]); contentView.push(obj1.dataList[i]["Content"]);
+                    positiveView.push(obj1.dataList[i]["positive"]); negativeView.push(obj1.dataList[i]["negative"]);
+                });
+                console.log("queryCount" + queryCount);
+                for (var i = 0; i < queryCount; i++) {
+                    document.getElementById("ADView").innerHTML += "<br>" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
+                        '<img src=\"../Images/' + a2View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a3View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
+                        '<img src=\"../Images/' + a4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +"&nbsp;&nbsp;&nbsp;"+
+                    '<img src=\"../Images/' + d1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
+                        '<img src=\"../Images/' + d2View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d3View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
+                        '<img src=\"../Images/' + d4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >';
+                    console.log("進攻:" + a1View[i] + a2View[i] + a3View[i] + a4View[i] + a5View[i] + "防守:" + d1View[i] + d2View[i]
+                        + d3View[i] + d4View[i] + d5View[i] + "評論:" + contentView[i] + "時間:" + insertTimeView[i] + "正評:" + positiveView[i]
+                        + "負評" + negativeView[i]);
+                }
+                queryCount = 0;
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Found error when using Ajax!!");
+                // 記得要加入error handler不然很難除錯
+            }
+        });
+
+};
 </script>
 
 <br>
@@ -165,9 +210,10 @@
 </table>
 
 <input type="button" value="查詢" onclick="submitForm()" style="background: rgba(255,255,255,0.5);" />
-<table>
-@Model.dataList[0].Name
-</table>
+<div id="displayView">
+    <span id="ADView">進攻:</span>
+</div>
+
 @*匯入驗證欄位所需的JavaScript*@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

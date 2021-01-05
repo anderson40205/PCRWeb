@@ -3,10 +3,10 @@
     ViewBag.Title = "Index";//顯示標題用
     var allRoleList = ViewBag.List;
 }
-<body background="~/Images/競技場.png" style="background-size: cover; margin: 0; "></body>
+<body background="~/Images/競技場.png" style="background-size: cover; margin: 0; ">
+</body>
 <input type="button" value="清除全部" onclick="clickAllClear()" style="background: rgba(255,255,255,0.5);" />
-<input type="button" value="新增進攻" onclick="clickLink('attack')" style="background: rgba(255,255,255,0.5);"/>
-<input type="button" value="新增防守" onclick="clickLink('defense')" style="background: rgba(255,255,255,0.5);"/>
+
 <br>
 @*建立新增資料所需的表單*@
 <div id="Attack">
@@ -185,6 +185,11 @@
         </td>
     </tr>
 </table>
+<input type="button" value="新增進攻" onclick="clickLink('attack')" style="background: rgba(255,255,255,0.5);" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" value="新增防守" onclick="clickLink('defense')" style="background: rgba(255,255,255,0.5);" />
 <br>
 <span style="background: rgba(255,255,255,0.5); font-size:17px;">
     備註:
@@ -193,4 +198,4 @@
 <textarea id="submitNote" style=" border: solid 1px #DDD;background-color:lightgray;
  background: rgba(255,255,255,0.5);width: 100%;padding: 2px 4px;border-radius: 0.5em;resize: vertical;
  box-sizing: border-box;"></textarea>
-<input type="button" value="新增送出" onclick="submitForm()" style="background: rgba(255,255,255,0.5);"/>
+<input type="button" value="新增送出" onclick="submitForm()" style="background: rgba(255,255,255,0.5);" />

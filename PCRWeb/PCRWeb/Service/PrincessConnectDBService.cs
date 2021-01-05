@@ -128,7 +128,7 @@ namespace PCRWeb.Service
         public List<PrincessConnect> SearchDefense(PrincessConnect d)
         {
             List<PrincessConnect> dataList = new List<PrincessConnect>();
-            string sql = $@" SELECT * FROM PrincessConnect WHERE d1 = N'{d.d1}' AND d2='{d.d2}' AND d3='{d.d3}' AND d4='{d.d4}' AND d5='{d.d5}' ";
+            string sql = $@" SELECT * FROM PrincessConnect WHERE d1 = N'{d.d1}' AND d2=N'{d.d2}' AND d3=N'{d.d3}' AND d4=N'{d.d4}' AND d5=N'{d.d5}' ";
             try
             {
                 conn.Open();//開啟DB連線
