@@ -3,15 +3,16 @@
     ViewBag.Title = "Index";//顯示標題用
     var allRoleList = ViewBag.List;
 }
-<input type="button" value="清除全部" onclick="clickAllClear()" />
-<input type="button" value="新增進攻" onclick="clickLink('attack')" />
-<input type="button" value="新增防守" onclick="clickLink('defense')" />
+<body background="~/Images/競技場.png" style="background-size: cover; margin: 0; ">
+</body>
+<input type="button" value="清除全部" onclick="clickAllClear()" style="background: rgba(255,255,255,0.5);" />
+
 <br>
 @*建立新增資料所需的表單*@
 <div id="Attack">
     @for (int i = 0; i < 134; i++)
     {
-        <button type="submit" id="@i" value="@(allRoleList[i])" onclick="clickImageBolder(@(i))" style="width: 70px; height: 70px; border:none;">
+        <button type="submit" id="@i" value="@(allRoleList[i])" onclick="clickImageBolder(@(i))" style="width: 70px; height: 70px; border:none; background-color:transparent;">
             <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px; border:none;" />
         </button>
     }
@@ -25,6 +26,7 @@
     let allRoleName = "";
     let a1 = ""; let a2 = ""; let a3 = ""; let a4 = ""; let a5 = "";
     let d1 = ""; let d2 = ""; let d3 = ""; let d4 = ""; let d5 = "";
+    let Note = "";
     for (var i = 0; i < roleCount; i++) {
         pcrState.push(true);
     }
@@ -34,9 +36,8 @@
         //document.getElementById('ARN').innerHTML = "";
         allRoleName = "";
         for (var i = 0; i < roleCount; i++) {
-            console.log("進去");
             pcrState[i] = true;
-            document.getElementById(i).style = "border:none; width: 70px; height: 70px;";
+            document.getElementById(i).style = "border:none; width: 70px; height: 70px;background-color:transparent;";
             document.getElementById(i).removeAttribute("disabled");
         }
     }
@@ -44,11 +45,11 @@
     function clickImageBolder(number) {
         falseCount = 0;
         if (pcrState[number]) {
-            document.getElementById(number).style = "color:blue; border: solid 4px ; width: 70px; height: 70px;";
+            document.getElementById(number).style = "color:blue; border: solid 4px ; width: 70px; height: 70px;background-color:transparent;";
             pcrState[number] = !pcrState[number];
         }
         else {
-            document.getElementById(number).style = "border:none;width: 70px; height: 70px;";
+            document.getElementById(number).style = "border:none;width: 70px; height: 70px;background-color:transparent;";
             pcrState[number] = !pcrState[number];
         }
         for (var i = 0; i < roleCount; i++) {
@@ -118,39 +119,31 @@
         }
         console.log("AD:" + a1 + " " + a2 + " " + a3 + " " + a4 + " " + a5 + " // " + d1 + " " + d2 + " " + d3 + " " + d4 + " " + d5 + " ");
     }
-</script>
-@*
-        <div id="CreateData" style="display:none">
-        <h3>新增</h3>
-        @using (Html.BeginForm("HandleCreateButtonClick", "PrincessConnect"))
-        {
-            for (int i = 0; i < 134; i++)
-            {
-                if (ViewBag.total == 5 && !ViewBag.pcrState[i])
-                {
-                    <button type="submit" name="stateId" value=@i id=@allRoleList[i] disabled><img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" /></button>
-                }
-                else
-                {
-                    <button type="submit" name="stateId" value=@i id=@allRoleList[i]>
-                        @if (ViewBag.pcrState[i] && ViewBag.total <= 5)
-                        {
-                            <img src="~/Images/@(allRoleList[i])選取.png" style="width: 50px; height: 50px;" />
-                        }
-                        else if (ViewBag.total != 0)
-                        {
-                            <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" />
-                        }
-                        else
-                        {
-                            <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px;" />
-                        }
-                    </button>
-                }
+    function submitForm() {
+        var model = new Object();
+        Note = document.getElementById("submitNote").value;
+        model.a1 = a1; model.d1 = d1;
+        model.a2 = a2; model.d2 = d2;
+        model.a3 = a3; model.d3 = d3;
+        model.a4 = a4; model.d4 = d4;
+        model.a5 = a5; model.d5 = d5;
+        model.content = Note;
+        jQuery.ajax({
+            type: "POST",
+            url: "@Url.Action("Create")",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ p: model }),
+            success: function (data) {
+                alert(data);
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
             }
-        }
-    </div>
-*@
+        });
+        parent.location.reload();
+    }
+</script>
 <script type="text/javascript">
     function attackClear() {
         Role = [];
@@ -169,9 +162,10 @@
 </script>
 
 <br>
-<table>
+<table style="background-color:lightgray; background:rgba(255,255,255,0.5);">
     <tr>
         <td>
+            &nbsp;&nbsp;&nbsp;
             進攻:
             <img id="ai0" style="width: 50px; height: 50px; border:none;" />
             <img id="ai1" style="width: 50px; height: 50px; border:none;" />
@@ -191,7 +185,17 @@
         </td>
     </tr>
 </table>
-@using (Html.BeginForm("HandleCreateButtonClick", "PrincessConnect"))
-{
-    <button type="submit" name="stateId" />
-}
+<input type="button" value="新增進攻" onclick="clickLink('attack')" style="background: rgba(255,255,255,0.5);" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" value="新增防守" onclick="clickLink('defense')" style="background: rgba(255,255,255,0.5);" />
+<br>
+<span style="background: rgba(255,255,255,0.5); font-size:17px;">
+    備註:
+</span>
+<br>
+<textarea id="submitNote" style=" border: solid 1px #DDD;background-color:lightgray;
+ background: rgba(255,255,255,0.5);width: 100%;padding: 2px 4px;border-radius: 0.5em;resize: vertical;
+ box-sizing: border-box;"></textarea>
+<input type="button" value="新增送出" onclick="submitForm()" style="background: rgba(255,255,255,0.5);" />
