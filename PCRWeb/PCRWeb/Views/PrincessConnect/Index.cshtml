@@ -33,6 +33,7 @@
     let a1View = []; let a2View = []; let a3View = []; let a4View = []; let a5View = [];
     let d1View = []; let d2View = []; let d3View = []; let d4View = []; let d5View = [];
     let contentView = []; let insertTimeView = []; let positiveView = []; let negativeView = [];
+    let idView = [];
     let queryCount = 0;
     for (var i = 0; i < roleCount; i++) {
         pcrState.push(true);
@@ -162,10 +163,11 @@
             cache: false,
             type: "POST",
             success: function (data, textStatus, jqXHR) {
+                console.log(data);
                 var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
                 $.each(obj1.dataList, function (i, obj2) {
                     queryCount++;
-                    console.log("i:" + i + "輸出:" + obj1.dataList[i]["a2"]);
+                    idView.push(obj1.dataList[i]["Id"]);
                     a1View.push(obj1.dataList[i]["a1"]); a2View.push(obj1.dataList[i]["a2"]); a3View.push(obj1.dataList[i]["a3"]); a4View.push(obj1.dataList[i]["a4"]); a5View.push(obj1.dataList[i]["a5"]);
                     d1View.push(obj1.dataList[i]["d1"]); d2View.push(obj1.dataList[i]["d2"]); d3View.push(obj1.dataList[i]["d3"]); d4View.push(obj1.dataList[i]["d4"]); d5View.push(obj1.dataList[i]["d5"]);
                     insertTimeView.push(obj1.dataList[i]["insertTime"]); contentView.push(obj1.dataList[i]["Content"]);
@@ -173,12 +175,13 @@
                 });
                 console.log("queryCount" + queryCount);
                 for (var i = 0; i < queryCount; i++) {
-                    document.getElementById("ADView").innerHTML += "<br>" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
+                    document.getElementById("ADView").innerHTML += "<br><div id=ADView" + idView[i] + ">" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
                         '<img src=\"../Images/' + a2View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a3View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
-                        '<img src=\"../Images/' + a4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +"&nbsp;&nbsp;&nbsp;"+
-                    '<img src=\"../Images/' + d1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
+                        '<img src=\"../Images/' + a4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + "&nbsp;&nbsp;&nbsp;" +
+                        '<img src=\"../Images/' + d1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
                         '<img src=\"../Images/' + d2View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d3View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
-                        '<img src=\"../Images/' + d4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >';
+                        '<img src=\"../Images/' + d4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + "</div>";
+                    console.log("ID=" + idView[i]);
                     console.log("進攻:" + a1View[i] + a2View[i] + a3View[i] + a4View[i] + a5View[i] + "防守:" + d1View[i] + d2View[i]
                         + d3View[i] + d4View[i] + d5View[i] + "評論:" + contentView[i] + "時間:" + insertTimeView[i] + "正評:" + positiveView[i]
                         + "負評" + negativeView[i]);
@@ -211,9 +214,13 @@
 
 <input type="button" value="查詢" onclick="submitForm()" style="background: rgba(255,255,255,0.5);" />
 <div id="displayView">
-    <span id="ADView">進攻:</span>
+    <span id="ADView"></span>
 </div>
-
+<p style="font-size: 66px; color: #ccc; cursor: pointer;">\f164</p>
+<output id="good_866816" style="    display: inline-block;
+    cursor: pointer;
+    user-select: none;
+    margin-right: 8px;"></output>
 @*匯入驗證欄位所需的JavaScript*@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
