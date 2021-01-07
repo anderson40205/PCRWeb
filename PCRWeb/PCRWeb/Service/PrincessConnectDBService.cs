@@ -15,71 +15,6 @@ namespace PCRWeb.Service
         private readonly static string cnstr = ConfigurationManager.ConnectionStrings["ASP.NET MVC"].ConnectionString;
         //建立與資料庫的連線
         private readonly SqlConnection conn = new SqlConnection(cnstr);
-        #region 查詢陣列資料
-        public List<PrincessConnect> GetDataList()
-        {
-            List<PrincessConnect> DataList = new List<PrincessConnect>();
-            string sql = @" SELECT * FROM PrincessConnect; ";
-            try
-            {
-                conn.Open();//開啟資料庫連線
-                SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql指令
-                SqlDataReader dr = cmd.ExecuteReader();//取得Sql資料
-                while (dr.Read())//獲得下一筆資料直到沒有資料
-                {
-                    PrincessConnect Data = new PrincessConnect();
-                    Data.Id = Convert.ToInt32(dr["Id"]);
-                    //確定此留言是否回復，且不允許是空白
-                    DataList.Add(Data);
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message.ToString());
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return DataList;
-        }
-        #endregion
-        public List<PrincessConnect> GetDataList(string Search)
-        {
-            List<PrincessConnect> DataList = new List<PrincessConnect>();
-
-            string sql = string.Empty;
-            if(!string.IsNullOrWhiteSpace(Search))
-            {
-                sql = $@" SELECT * FROM PrincessConnect WHERE Content LIKE '%{Search}'; ";
-            }
-            else
-            {
-                sql = @" SELECT * FROM PrincessConnect; ";
-            }
-            try
-            {
-                conn.Open();//開啟資料庫連線
-                SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql指令
-                SqlDataReader dr = cmd.ExecuteReader();//取得Sql資料
-                while (dr.Read())//獲得下一筆資料直到沒有資料
-                {
-                    PrincessConnect Data = new PrincessConnect();
-                    Data.Id = Convert.ToInt32(dr["Id"]);
-                    //確定此留言是否回復，且不允許是空白
-                    DataList.Add(Data);
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message.ToString());
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return DataList;
-        }
         #region 新增資料
         public void InsertPrincessConnectTen(PrincessConnect newData)
         {
@@ -105,29 +40,7 @@ namespace PCRWeb.Service
             }
         }
         #endregion
-        public PrincessConnect GetDataById(int Id)
-        {
-            PrincessConnect Data = new PrincessConnect();
-            string sql = $@" SELECT * FROM PrincessConnect WHERE Id = {Id} ";
-            try
-            {
-                conn.Open();//開啟DB連線
-                SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql資料
-                SqlDataReader dr = cmd.ExecuteReader();
-                //SqlDataReader 的預設位置是在第一筆記錄之前。 因此，您必須呼叫 Read 才能開始存取任何資料。
-                dr.Read();
-                Data.Id = Convert.ToInt32(dr["Id"]);
-            }
-            catch (Exception)
-            {
-                Data = null;//查無資料
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return Data;
-        }
+
         public List<PrincessConnect> SearchDefense(PrincessConnect d)
         {
             List<PrincessConnect> dataList = new List<PrincessConnect>();
@@ -160,52 +73,141 @@ namespace PCRWeb.Service
             }
             return dataList;
         }
-        #region 修改留言
-        public void UpdatePrincessConnect(PrincessConnect UpdateData)
-        {
-            //string sql = $@" UPDATE PrincessConnect SET Content='{UpdateData.Content}' WHERE Id = '{UpdateData.Id}'";
-            //try
-            //{
-            //    conn.Open();//開啟DB連線
-            //    SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql資料
-            //    cmd.ExecuteNonQuery();
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new Exception(e.Message.ToString());
-            //}
-            //finally
-            //{
-            //    conn.Close();
-            //}
-        }
-        #endregion
-
-        public void DeleteGuestbooks(int Id)
-        {
-            string sql = $@" DELETE FROM PrincessConnect WHERE Id = {Id}; ";
+        public PositiveAndNegativeReturn SearchPositive(PrincessConnect p,Members m)
+        {//這邊一律處理使用者點讚這個動作，沒有=>新增到關聯表，使用者以經典過讚了=>從關聯表移除這列，PCR表該行讚減一
+            //使用者是點倒讚=>更新關聯表倒讚變讚，
+            string sql = $@" SELECT * FROM MandP WHERE MPAccount = N'{m.Account}' AND PID = N'{p.Id}'";
+            PositiveAndNegativeReturn Data = new PositiveAndNegativeReturn();
+            MandP mData = new MandP();
             try
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.ExecuteNonQuery();
+                conn.Open();//開啟DB連線
+                SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql資料
+                SqlDataReader dr = cmd.ExecuteReader();
+                //SqlDataReader 的預設位置是在第一筆記錄之前。 因此，您必須呼叫 Read 才能開始存取任何資料。
+                if (dr.Read())
+                {
+                    mData.MPAccount = dr["MPAccount"].ToString();
+                    mData.PID = Convert.ToInt32(dr["PID"]);
+                    mData.status = dr["status"].ToString();
+                    if(mData.status.Equals("p"))
+                    {
+                        dr.Close();
+                        new SqlCommand($@" DELETE FROM MandP WHERE MPAccount = N'{m.Account}' AND PID = N'{mData.PID}' AND status = N'{'p'}'", conn).ExecuteNonQuery();
+                        SqlDataReader drTemp = new SqlCommand($@" SELECT * FROM PrincessConnect WHERE Id = N'{p.Id}'", conn).ExecuteReader();
+                        if(drTemp.Read())
+                        {
+                            int positiveCount = Convert.ToInt32(drTemp["positive"]);
+                            drTemp.Close();
+                            new SqlCommand($@" UPDATE PrincessConnect SET positive = N'{positiveCount-1}' WHERE Id='{p.Id}'",conn).ExecuteNonQuery();
+                            Data.positive = positiveCount - 1;
+                        }
+                    }
+                    else if(mData.status.Equals("n"))
+                    {
+                        dr.Close();
+                        new SqlCommand($@" UPDATE MandP SET status = '{'p'}' WHERE MPAccount = N'{m.Account}' AND PID = N'{p.Id}'", conn).ExecuteNonQuery();
+                        SqlDataReader drTemp = new SqlCommand($@" SELECT * FROM PrincessConnect WHERE Id = N'{p.Id}'", conn).ExecuteReader();
+                        if (drTemp.Read())
+                        {
+                            int positiveCount = Convert.ToInt32(drTemp["positive"]); int negativeCount = Convert.ToInt32(drTemp["negative"]);
+                            drTemp.Close();
+                            new SqlCommand($@" UPDATE PrincessConnect SET positive = N'{positiveCount + 1}' , negative = N'{negativeCount - 1}' WHERE Id='{p.Id}'", conn).ExecuteNonQuery();
+                            Data.positive = positiveCount + 1; Data.negative = negativeCount - 1;
+                        }
+                    }
+                }
+                else
+                {
+                    dr.Close();
+                    string insertSql = $@" INSERT INTO MandP(MPAccount,PID,status) VALUES( N'{m.Account}',N'{p.Id}',N'{'p'}' ); ";
+                    new SqlCommand(insertSql, conn).ExecuteNonQuery();
+                    SqlDataReader drTemp = new SqlCommand($@" SELECT * FROM PrincessConnect WHERE Id = N'{p.Id}'", conn).ExecuteReader();
+                    if (drTemp.Read())
+                    {
+                        int positiveCount = Convert.ToInt32(drTemp["positive"]);
+                        drTemp.Close();
+                        new SqlCommand($@" UPDATE PrincessConnect SET positive = N'{positiveCount + 1}' WHERE Id='{p.Id}'", conn).ExecuteNonQuery();
+                    }
+                }
             }
-            catch(Exception e)
+            catch (Exception s)
             {
-                throw new Exception(e.Message.ToString());
+                Console.WriteLine(s.Message);
             }
             finally
             {
                 conn.Close();
             }
+            return Data;
         }
-
-        #region 檢查相關
-        public bool CheckUpdate(int Id)
-        {
-            PrincessConnect Data = GetDataById(Id);//根據Id取得要修改的資料
-            return (Data != null);//判斷是否有資料以及回復
+        public PositiveAndNegativeReturn SearchNegative(PrincessConnect p, Members m)
+        {//這邊一律處理使用者點讚這個動作，沒有=>新增到關聯表，使用者以經典過讚了=>從關聯表移除這列，PCR表該行讚減一
+            //使用者是點倒讚=>更新關聯表倒讚變讚，
+            string sql = $@" SELECT * FROM MandP WHERE MPAccount = N'{m.Account}' AND PID = N'{p.Id}'";
+            PositiveAndNegativeReturn Data = new PositiveAndNegativeReturn();
+            MandP mData = new MandP();
+            try
+            {
+                conn.Open();//開啟DB連線
+                SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql資料
+                SqlDataReader dr = cmd.ExecuteReader();
+                //SqlDataReader 的預設位置是在第一筆記錄之前。 因此，您必須呼叫 Read 才能開始存取任何資料。
+                if (dr.Read())
+                {
+                    mData.MPAccount = dr["MPAccount"].ToString();
+                    mData.PID = Convert.ToInt32(dr["PID"]);
+                    mData.status = dr["status"].ToString();
+                    if (mData.status.Equals("n"))
+                    {
+                        dr.Close();
+                        new SqlCommand($@" DELETE FROM MandP WHERE MPAccount = N'{m.Account}' AND PID = N'{mData.PID}' AND status = N'{'n'}'", conn).ExecuteNonQuery();
+                        SqlDataReader drTemp = new SqlCommand($@" SELECT * FROM PrincessConnect WHERE Id = N'{p.Id}'", conn).ExecuteReader();
+                        if (drTemp.Read())
+                        {
+                            int negativeCount = Convert.ToInt32(drTemp["negative"]);
+                            drTemp.Close();
+                            new SqlCommand($@" UPDATE PrincessConnect SET negative = N'{negativeCount - 1}' WHERE Id='{p.Id}'", conn).ExecuteNonQuery();
+                            Data.negative = negativeCount - 1;
+                        }
+                    }
+                    else if (mData.status.Equals("p"))
+                    {
+                        dr.Close();
+                        new SqlCommand($@" UPDATE MandP SET status = '{'n'}' WHERE MPAccount = N'{m.Account}' AND PID = N'{p.Id}'", conn).ExecuteNonQuery();
+                        SqlDataReader drTemp = new SqlCommand($@" SELECT * FROM PrincessConnect WHERE Id = N'{p.Id}'", conn).ExecuteReader();
+                        if (drTemp.Read())
+                        {
+                            int positiveCount = Convert.ToInt32(drTemp["positive"]); int negativeCount = Convert.ToInt32(drTemp["negative"]);
+                            drTemp.Close();
+                            new SqlCommand($@" UPDATE PrincessConnect SET positive = N'{positiveCount - 1}' , negative = N'{negativeCount + 1}' WHERE Id='{p.Id}'", conn).ExecuteNonQuery();
+                            Data.positive = positiveCount - 1; Data.negative = negativeCount + 1;
+                        }
+                    }
+                }
+                else
+                {
+                    dr.Close();
+                    string insertSql = $@" INSERT INTO MandP(MPAccount,PID,status) VALUES( N'{m.Account}',N'{p.Id}',N'{'n'}' ); ";
+                    new SqlCommand(insertSql, conn).ExecuteNonQuery();
+                    SqlDataReader drTemp = new SqlCommand($@" SELECT * FROM PrincessConnect WHERE Id = N'{p.Id}'", conn).ExecuteReader();
+                    if (drTemp.Read())
+                    {
+                        int negativeCount = Convert.ToInt32(drTemp["negative"]);
+                        drTemp.Close();
+                        new SqlCommand($@" UPDATE PrincessConnect SET negative = N'{negativeCount + 1}' WHERE Id='{p.Id}'", conn).ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception s)
+            {
+                Console.WriteLine(s.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return Data;
         }
-        #endregion
     }
 }

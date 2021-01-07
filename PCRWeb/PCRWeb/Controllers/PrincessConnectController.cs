@@ -14,7 +14,7 @@ namespace PCRWeb.Controllers
     {
         // GET: PrincessConnect
         private readonly PrincessConnectDBService PrincessConnectDBService = new PrincessConnectDBService();
-        
+
         static List<bool> pcrState = new List<bool>();//加static才能宣告程全域
         static PrincessConnectViewModel Data = new PrincessConnectViewModel();
         static List<String> allRoleList = new List<String>();
@@ -141,7 +141,7 @@ namespace PCRWeb.Controllers
             ViewBag.pcrState = pcrState;
             ViewBag.total = total;
             ViewBag.allName = allName;
-            
+
             return View();
         }
         [HttpPost]
@@ -213,30 +213,22 @@ namespace PCRWeb.Controllers
             return Json(json);
         }
         [HttpPost]
-        //修改留言頁面要根據傳入編號來決定要修改的資料
-        public ActionResult EditPositive(int Id)
-        {//取得頁面所需資料，藉由Service取得
-            PrincessConnect Data = PrincessConnectDBService.GetDataById(Id);//取得頁面所需的資料
-            return View(Data);//將資料傳入View中
-        }
-        [HttpPost]
-        public ActionResult EditNegaitive(int Id)
-        {//取得頁面所需資料，藉由Service取得
-            PrincessConnect Data = PrincessConnectDBService.GetDataById(Id);//取得頁面所需的資料
-            return View(Data);//將資料傳入View中
-        }
-        //TODO
-        [HttpPost]
-        //使用Bind的Include來定義只接受的欄位，用來避免傳入其他不相干值
-        public ActionResult Edit(int Id, [Bind(Include = "Name,Content")] PrincessConnect UpdateData)
+        public ActionResult PositiveEdit(PrincessConnect p,Members m)
         {
-            //修改資料的是否可修改判斷
-            if (PrincessConnectDBService.CheckUpdate(Id))
-            {
-                UpdateData.Id = Id;//將編號設定至修改資料中
-                PrincessConnectDBService.UpdatePrincessConnect(UpdateData);//使用Service來修改資料
-            }
-            return RedirectToAction("Index");
+            PositiveAndNegativeReturn returnPandN = new PositiveAndNegativeReturn();
+            //PrincessConnectViewModel receiveSearch = new PrincessConnectViewModel();
+            returnPandN = PrincessConnectDBService.SearchPositive(p, m);
+            //string json = JsonConvert.SerializeObject(receiveSearch);
+            string json = JsonConvert.SerializeObject(returnPandN);
+            return Json(json);
+        }
+        [HttpPost]
+        public ActionResult NegativeEdit(PrincessConnect p, Members m)
+        {
+            PositiveAndNegativeReturn returnPandN = new PositiveAndNegativeReturn();
+            returnPandN = PrincessConnectDBService.SearchNegative(p, m);
+            string json = JsonConvert.SerializeObject(returnPandN);
+            return Json(json);
         }
     }
 }

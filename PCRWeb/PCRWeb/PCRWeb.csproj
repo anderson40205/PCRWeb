@@ -129,8 +129,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ButtonModel.cs" />
+    <Compile Include="Models\MandP.cs" />
     <Compile Include="Models\Members.cs" />
+    <Compile Include="Models\PositiveAndNegativeReturn.cs" />
     <Compile Include="Models\PrincessConnect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\JwtObject.cs" />
@@ -314,7 +315,6 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\PrincessConnect\Create.cshtml" />
-    <Content Include="Views\PrincessConnect\Edit.cshtml" />
     <Content Include="Views\PrincessConnect\Index.cshtml" />
     <Content Include="Views\Members\Register.cshtml" />
     <Content Include="Views\Members\RegisterResult.cshtml" />

@@ -12,10 +12,6 @@
     }
 
 </head>
-@using (Html.BeginForm())
-{
-
-}
 <div id="dialog" title="Basic dialog"></div>
 <br>
 <body background="~/Images/競技場.png" style="background-size: cover; margin: 0; "></body>
@@ -177,6 +173,10 @@
             cache: false,
             type: "POST",
             success: function (data, textStatus, jqXHR) {
+                idView = [];
+                a1View = []; a2View = []; a3View = []; a4View = []; a5View = [];
+                d1View = []; d2View = []; d3View = []; d4View = []; d5View = [];
+                insertTimeView = []; contentView = []; positiveView = []; negativeView = [];
                 console.log(data);
                 var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
                 $.each(obj1.dataList, function (i, obj2) {
@@ -188,14 +188,15 @@
                     positiveView.push(obj1.dataList[i]["positive"]); negativeView.push(obj1.dataList[i]["negative"]);
                 });
                 console.log("queryCount" + queryCount);
+                document.getElementById("ADView").innerHTML = "";
                 for (var i = 0; i < queryCount; i++) {
-                    document.getElementById("ADView").innerHTML += "<br><div id=ADView" + idView[i] + ">" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
-                        '<img src=\"../Images/' + a2View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a3View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
-                        '<img src=\"../Images/' + a4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + "&nbsp;" +
-                        '<img src=\"../Images/' + d1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
-                        '<img src=\"../Images/' + d2View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d3View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
-                        '<img src=\"../Images/' + d4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + "時間:" + insertTimeView[i] +
-                        "<div id=AView" + idView[i] + " onclick=\"good(" + idView[i]+")\" style=\"font - size: 20px; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128402;" + positiveView[i] + "</div>&nbsp;&nbsp;&nbsp;<div id=DView" + idView[i] +
+                    document.getElementById("ADView").innerHTML += "<br><div id=ADView" + idView[i] + ">" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
+                        '<img src=\"../Images/' + a2View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + a3View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
+                        '<img src=\"../Images/' + a4View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + a5View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + "&nbsp;" +
+                        '<img src=\"../Images/' + d1View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
+                        '<img src=\"../Images/' + d2View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + d3View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
+                        '<img src=\"../Images/' + d4View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + d5View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + "時間:" + insertTimeView[i] + "<br>評論:" + contentView[i] +
+                        "<br><div id=AView" + idView[i] + " onclick=\"good(" + idView[i]+")\" style=\"font - size: 20px; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128402;" + positiveView[i] + "</div>&nbsp;&nbsp;&nbsp;<div id=DView" + idView[i] +
                         " onclick=\"bad(" + idView[i] +")\" style=\"font - size: 20px; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128403;" + negativeView[i] + "</div>";
                     console.log("ID=" + idView[i]);
                     console.log("進攻:" + a1View[i] + a2View[i] + a3View[i] + a4View[i] + a5View[i] + "防守:" + d1View[i] + d2View[i]
@@ -216,14 +217,52 @@
             return;//沒登入不准動到讚 倒讚
         }
         console.log(ID + " good 被點擊");
-        var model = new Object();
-        model.positive
+        var Pmodel = new Object();
+        Pmodel.Id = ID;
+        var Mmodel = new Object();
+        Mmodel.Account = Account;
+        jQuery.ajax({
+            url: '@Url.Action("PositiveEdit", "PrincessConnect")',
+            data: {
+                "p": Pmodel,
+                "m": Mmodel
+            }, // 變數名稱必須跟Action裡的相同
+            cache: false,
+            type: "POST",
+            success: function (data, textStatus, jqXHR) {
+                console.log("正讚:" + data);
+                var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Found error when using Ajax!!");
+            }
+        });
     }
     function bad(ID) {
         if (Account == "") {
             return;
         }
         console.log(ID + " bad 被點擊");
+        var Pmodel = new Object();
+        Pmodel.Id = ID;
+        var Mmodel = new Object();
+        Mmodel.Account = Account;
+        jQuery.ajax({
+            url: '@Url.Action("NegativeEdit", "PrincessConnect")',
+            data: {
+                "p": Pmodel,
+                "m": Mmodel
+            }, // 變數名稱必須跟Action裡的相同
+            cache: false,
+            type: "POST",
+            success: function (data, textStatus, jqXHR) {
+                console.log("倒讚:" + data);
+                var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Found error when using Ajax!!");
+            }
+        });
     }
 </script>
 
@@ -264,7 +303,7 @@
 </div>
 
 
-    @*匯入驗證欄位所需的JavaScript*@
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+@*匯入驗證欄位所需的JavaScript*@
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
