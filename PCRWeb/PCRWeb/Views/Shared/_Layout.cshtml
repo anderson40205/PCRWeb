@@ -21,9 +21,18 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
-                    <li>@Html.ActionLink("關於", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡人", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("查詢", "Index", "PrincessConnect")</li>
+                    <li>@Html.ActionLink("新增資料", "Create", "PrincessConnect")</li>
+                    @*使用者登入才會顯示*@
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li style="color:white">您好，@(User.Identity.Name)</li>
+                        <li>@Html.ActionLink("登出", "Logout", "Members")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("登入", "Login", "Members")</li>
+                    }
                 </ul>
             </div>
         </div>
@@ -32,10 +41,8 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 應用程式</p>
         </footer>
     </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

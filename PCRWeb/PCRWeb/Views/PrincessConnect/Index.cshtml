@@ -3,9 +3,22 @@
     ViewBag.Title = "Index";//顯示標題用
     var allRoleList = ViewBag.List;
 }
-<head><script src="https://code.jquery.com/jquery-3.5.1.min.js"></script></head>
-<body background="~/Images/競技場.png" style="background-size: cover; margin: 0; ">
-</body>
+<head>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>var Account = "";</script>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script>Account = "@(User.Identity.Name)";</script>
+    }
+
+</head>
+@using (Html.BeginForm())
+{
+
+}
+<div id="dialog" title="Basic dialog"></div>
+<br>
+<body background="~/Images/競技場.png" style="background-size: cover; margin: 0; "></body>
 <input id="isHide" type="submit" value="展開" onclick="hide()" />
 <br>
 <div>
@@ -19,6 +32,7 @@
     <input type="submit" id="OK" value="確認" style="display: none;" onclick="clickLink()" />
 </div>
 <script type="text/javascript">
+    console.log("Account: " + Account);
     let fiveCount = 0;
     let Role = [];
     let roleCount = 134;
@@ -177,10 +191,12 @@
                 for (var i = 0; i < queryCount; i++) {
                     document.getElementById("ADView").innerHTML += "<br><div id=ADView" + idView[i] + ">" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
                         '<img src=\"../Images/' + a2View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a3View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
-                        '<img src=\"../Images/' + a4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + "&nbsp;&nbsp;&nbsp;" +
+                        '<img src=\"../Images/' + a4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + a5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + "&nbsp;" +
                         '<img src=\"../Images/' + d1View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
                         '<img src=\"../Images/' + d2View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d3View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' +
-                        '<img src=\"../Images/' + d4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + "</div>";
+                        '<img src=\"../Images/' + d4View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + '<img src=\"../Images/' + d5View[i] + '.png\" style=\"width: 50px; height: 50px;\" >' + "時間:" + insertTimeView[i] +
+                        "<div id=AView" + idView[i] + " onclick=\"good(" + idView[i]+")\" style=\"font - size: 20px; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128402;" + positiveView[i] + "</div>&nbsp;&nbsp;&nbsp;<div id=DView" + idView[i] +
+                        " onclick=\"bad(" + idView[i] +")\" style=\"font - size: 20px; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128403;" + negativeView[i] + "</div>";
                     console.log("ID=" + idView[i]);
                     console.log("進攻:" + a1View[i] + a2View[i] + a3View[i] + a4View[i] + a5View[i] + "防守:" + d1View[i] + d2View[i]
                         + d3View[i] + d4View[i] + d5View[i] + "評論:" + contentView[i] + "時間:" + insertTimeView[i] + "正評:" + positiveView[i]
@@ -194,7 +210,21 @@
             }
         });
 
-};
+    };
+    function good(ID) {
+        if (Account == "") {
+            return;//沒登入不准動到讚 倒讚
+        }
+        console.log(ID + " good 被點擊");
+        var model = new Object();
+        model.positive
+    }
+    function bad(ID) {
+        if (Account == "") {
+            return;
+        }
+        console.log(ID + " bad 被點擊");
+    }
 </script>
 
 <br>
@@ -216,12 +246,25 @@
 <div id="displayView">
     <span id="ADView"></span>
 </div>
-<p style="font-size: 66px; color: #ccc; cursor: pointer;">\f164</p>
-<output id="good_866816" style="    display: inline-block;
-    cursor: pointer;
-    user-select: none;
-    margin-right: 8px;"></output>
-@*匯入驗證欄位所需的JavaScript*@
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<script>
+    let GB = true;
+    function changeGB() {
+        if (GB) {
+            document.getElementById("22222").style = "color:blue;"
+            GB = !GB;
+        }
+        else {
+            document.getElementById("22222").style = "";
+            GB = !GB;
+        }
+    }
+</script>
+<div id="22222"onclick="changeGB()">
+    &#128403;
+</div>
+
+
+    @*匯入驗證欄位所需的JavaScript*@
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

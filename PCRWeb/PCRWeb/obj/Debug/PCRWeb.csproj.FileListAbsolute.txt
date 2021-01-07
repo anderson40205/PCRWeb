@@ -256,3 +256,4 @@ C:\SourceTree\PCRWeb\PCRWeb\PCRWeb\obj\Debug\PCRWeb.csproj.CoreCompileInputs.cac
 C:\SourceTree\PCRWeb\PCRWeb\PCRWeb\obj\Debug\PCRWeb.csproj.CopyComplete
 C:\SourceTree\PCRWeb\PCRWeb\PCRWeb\obj\Debug\PCRWeb.dll
 C:\SourceTree\PCRWeb\PCRWeb\PCRWeb\obj\Debug\PCRWeb.pdb
+C:\SourceTree\PCRWeb\PCRWeb\PCRWeb\bin\jose-jwt.dll

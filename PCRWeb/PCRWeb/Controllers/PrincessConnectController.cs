@@ -19,7 +19,7 @@ namespace PCRWeb.Controllers
         static PrincessConnectViewModel Data = new PrincessConnectViewModel();
         static List<String> allRoleList = new List<String>();
         static int total = 0;
-        static int selectId = 0;
+
         public ActionResult Index()
         {
             var pcrList = new PrincessConnect[]{
@@ -209,19 +209,24 @@ namespace PCRWeb.Controllers
             ViewBag.pcrState = pcrState;
             ViewBag.total = total;
             ViewBag.allName = allName;
-            string ap = "apple";
             string json = JsonConvert.SerializeObject(receiveSearch);
             return Json(json);
         }
-        #region 修改留言
+        [HttpPost]
         //修改留言頁面要根據傳入編號來決定要修改的資料
-        public ActionResult Edit(int Id)
+        public ActionResult EditPositive(int Id)
         {//取得頁面所需資料，藉由Service取得
             PrincessConnect Data = PrincessConnectDBService.GetDataById(Id);//取得頁面所需的資料
             return View(Data);//將資料傳入View中
         }
-        [HttpPost]//修改留言傳入資料時的Action
-        //設定此Action只接受頁面POST資料傳入
+        [HttpPost]
+        public ActionResult EditNegaitive(int Id)
+        {//取得頁面所需資料，藉由Service取得
+            PrincessConnect Data = PrincessConnectDBService.GetDataById(Id);//取得頁面所需的資料
+            return View(Data);//將資料傳入View中
+        }
+        //TODO
+        [HttpPost]
         //使用Bind的Include來定義只接受的欄位，用來避免傳入其他不相干值
         public ActionResult Edit(int Id, [Bind(Include = "Name,Content")] PrincessConnect UpdateData)
         {
@@ -231,14 +236,6 @@ namespace PCRWeb.Controllers
                 UpdateData.Id = Id;//將編號設定至修改資料中
                 PrincessConnectDBService.UpdatePrincessConnect(UpdateData);//使用Service來修改資料
             }
-            return RedirectToAction("Index");
-        }
-        #endregion
-
-        public ActionResult Delete(int Id)
-        {
-            //使用Service來刪除資料
-            PrincessConnectDBService.DeleteGuestbooks(Id);
             return RedirectToAction("Index");
         }
     }
