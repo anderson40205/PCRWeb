@@ -148,7 +148,8 @@ namespace PCRWeb.Controllers
         public ActionResult Create(PrincessConnect p)
         {
             PrincessConnectDBService.InsertPrincessConnectTen(p);
-            return Redirect("Create");
+            string json = JsonConvert.SerializeObject("Create");
+            return Json(json);
         }
         [HttpPost]
         public ActionResult Search(PrincessConnect p)
