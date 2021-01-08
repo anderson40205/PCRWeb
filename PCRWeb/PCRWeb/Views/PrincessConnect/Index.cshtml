@@ -10,7 +10,6 @@
     {
         <script>Account = "@(User.Identity.Name)";</script>
     }
-
 </head>
 <div id="dialog" title="Basic dialog"></div>
 <br>
@@ -72,7 +71,6 @@
         }
         hide();
         d1 = Role[0]; d2 = Role[1]; d3 = Role[2]; d4 = Role[3]; d5 = Role[4];
-        console.log("防守確認:" + d1 + d2 + d3 + d4 + d5);
     }
     function hide() {
         hideToggle = !hideToggle;
@@ -95,7 +93,6 @@
     }
     function clickAllClear() {
         falseCount = 0;
-        //document.getElementById('ARN').innerHTML = "";
         allRoleName = "";
         for (var i = 0; i < roleCount; i++) {
             pcrState[i] = true;
@@ -142,24 +139,6 @@
         allRoleName = "";
         falseCount = 0;
     }
-
-    @*function submitForm() {
-
-        jQuery.ajax({
-            type: "POST",
-            url: "@Url.Action("Search")",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({ p: model }),
-            success: function (data) {
-                alert(data);
-            },
-            failure: function (errMsg) {
-                alert(errMsg);
-            }
-        });
-    }*@
-
     function submitForm() {
         var model = new Object();
         model.d1 = d1;
@@ -177,7 +156,6 @@
                 a1View = []; a2View = []; a3View = []; a4View = []; a5View = [];
                 d1View = []; d2View = []; d3View = []; d4View = []; d5View = [];
                 insertTimeView = []; contentView = []; positiveView = []; negativeView = [];
-                console.log(data);
                 var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
                 $.each(obj1.dataList, function (i, obj2) {
                     queryCount++;
@@ -187,27 +165,22 @@
                     insertTimeView.push(obj1.dataList[i]["insertTime"]); contentView.push(obj1.dataList[i]["Content"]);
                     positiveView.push(obj1.dataList[i]["positive"]); negativeView.push(obj1.dataList[i]["negative"]);
                 });
-                console.log("queryCount" + queryCount);
                 document.getElementById("ADView").innerHTML = "";
                 for (var i = 0; i < queryCount; i++) {
-                    document.getElementById("ADView").innerHTML += "<br><div id=ADView" + idView[i] + ">" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
+                    document.getElementById("ADView").innerHTML += "<br><div id=ADView" + idView[i] + " style=\"background: rgba(255, 255, 255, 0.5);\">" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
                         '<img src=\"../Images/' + a2View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + a3View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
                         '<img src=\"../Images/' + a4View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + a5View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + "&nbsp;" +
                         '<img src=\"../Images/' + d1View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
                         '<img src=\"../Images/' + d2View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + d3View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
                         '<img src=\"../Images/' + d4View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + d5View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + "時間:" + insertTimeView[i] + "<br>評論:" + contentView[i] +
-                        "<br><div id=AView" + idView[i] + " onclick=\"good(" + idView[i]+")\" style=\"font - size: 20px; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128402;" + positiveView[i] + "</div>&nbsp;&nbsp;&nbsp;<div id=DView" + idView[i] +
-                        " onclick=\"bad(" + idView[i] +")\" style=\"font - size: 20px; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128403;" + negativeView[i] + "</div>";
-                    console.log("ID=" + idView[i]);
-                    console.log("進攻:" + a1View[i] + a2View[i] + a3View[i] + a4View[i] + a5View[i] + "防守:" + d1View[i] + d2View[i]
-                        + d3View[i] + d4View[i] + d5View[i] + "評論:" + contentView[i] + "時間:" + insertTimeView[i] + "正評:" + positiveView[i]
-                        + "負評" + negativeView[i]);
+                        "<br><span id=AView" + idView[i] + " onclick=\"good(" + idView[i] + ")\" style=\"font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128402;</span><span id=\"pCount" + idView[i] + "\">" + positiveView[i] + "</span>&nbsp;&nbsp;&nbsp;<span id=DView" + idView[i] +
+                        " onclick=\"bad(" + idView[i] + ")\" style=\"font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128403;</span><span id=\"nCount" + idView[i] + "\">" + negativeView[i] + "</span> ";
                 }
                 queryCount = 0;
+                GoodBadView();
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                alert("Found error when using Ajax!!");
-                // 記得要加入error handler不然很難除錯
+                alert("Found error when using Ajax!!");// 記得要加入error handler不然很難除錯
             }
         });
 
@@ -216,7 +189,6 @@
         if (Account == "") {
             return;//沒登入不准動到讚 倒讚
         }
-        console.log(ID + " good 被點擊");
         var Pmodel = new Object();
         Pmodel.Id = ID;
         var Mmodel = new Object();
@@ -230,13 +202,13 @@
             cache: false,
             type: "POST",
             success: function (data, textStatus, jqXHR) {
-                console.log("正讚:" + data);
-                var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
+                RefreshGoodBadView(ID, "good");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Found error when using Ajax!!");
             }
         });
+
     }
     function bad(ID) {
         if (Account == "") {
@@ -256,11 +228,99 @@
             cache: false,
             type: "POST",
             success: function (data, textStatus, jqXHR) {
-                console.log("倒讚:" + data);
                 var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
+                RefreshGoodBadView(ID, "bad");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Found error when using Ajax!!");
+            }
+        });
+
+    }
+    function RefreshGoodBadView(ID,gd) {
+        let PIDView = [];
+        let statusView = [];
+        var Mmodel = new Object();
+        Mmodel.Account = Account;
+        jQuery.ajax({
+            url: '@Url.Action("bookIDGetData","PrincessConnect")',
+            data: { "i": ID },
+            cache: false,
+            type: "POST",
+            success: function (data, textStatus, jqXHR) {
+                var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
+                document.getElementById("pCount" + ID).innerHTML = obj1["positive"];
+                document.getElementById("nCount" + ID).innerHTML = obj1["negative"];
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Found error when using Ajax!!");
+            }
+        })
+        jQuery.ajax({
+            url: '@Url.Action("MandPIDGetData", "PrincessConnect")',
+            data: {
+                "account": Account,
+                "i": ID
+            },
+            cache: false,
+            type: "POST",
+            success: function (data, textStatus, jqXHR) {
+                var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
+                if (gd == "good" && parseInt(obj1) == 1) {
+                    document.getElementById("AView" + ID).style = "font-size: 25px;color:red; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                    document.getElementById("DView" + ID).style = "font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                }
+                else if (gd == "good" && parseInt(obj1) == 0)
+                    document.getElementById("AView" + ID).style = "font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                else if (gd == "bad" && parseInt(obj1) == 2) {
+                    document.getElementById("DView" + ID).style = "font-size: 25px;color:red; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                    document.getElementById("AView" + ID).style = "font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                }
+                else if (gd == "bad" && parseInt(obj1) == 0)
+                    document.getElementById("DView" +ID).style = "font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Found error when using Ajax!!");
+            }
+        })
+    }
+    function GoodBadView() {
+        let PIDView = [];
+        let statusView = [];
+        var Mmodel = new Object();
+        Mmodel.Account = Account;
+        jQuery.ajax({
+            url: '@Url.Action("SearchPositiveAndNegative", "PrincessConnect")',
+            data: {
+                "m": Mmodel
+            }, // 變數名稱必須跟Action裡的相同
+            cache: false,
+            type: "POST",
+            success: function (data, textStatus, jqXHR) {
+                console.log("GoodBadView:" + data);
+                var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
+                $.each(obj1.dataList, function (i, obj2) {
+                    queryCount++;
+                    PIDView.push(obj1.dataList[i]["PID"]);
+                    statusView.push(obj1.dataList[i]["status"]);
+                });
+                console.log("queryCount" + queryCount);//AView1 pCount1 DView1 nCount1
+
+                for (var i = 0; i < queryCount; i++) {
+                    console.log("statusView[i]" + statusView[i]);
+                    if (document.getElementById("ADView"+PIDView[i])) {
+                        if (statusView[i] == "p") {
+                            document.getElementById("AView" + PIDView[i]).style = "font-size: 25px;color:red; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                        }
+                        else if (statusView[i] == "n") {
+                            document.getElementById("DView" + PIDView[i]).style = "font-size: 25px;color:red; display: inline; cursor: pointer; user - select: none; margin - right: 20px;";
+                        }
+                    }
+                }
+                queryCount = 0;
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Found error when using Ajax!!");// 記得要加入error handler不然很難除錯
             }
         });
     }
@@ -285,23 +345,6 @@
 <div id="displayView">
     <span id="ADView"></span>
 </div>
-<script>
-    let GB = true;
-    function changeGB() {
-        if (GB) {
-            document.getElementById("22222").style = "color:blue;"
-            GB = !GB;
-        }
-        else {
-            document.getElementById("22222").style = "";
-            GB = !GB;
-        }
-    }
-</script>
-<div id="22222"onclick="changeGB()">
-    &#128403;
-</div>
-
 
 @*匯入驗證欄位所需的JavaScript*@
 @section Scripts {

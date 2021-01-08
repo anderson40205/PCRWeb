@@ -138,6 +138,7 @@
     <Compile Include="Security\JwtService.cs" />
     <Compile Include="Service\MembersDBService.cs" />
     <Compile Include="Service\PrincessConnectDBService.cs" />
+    <Compile Include="ViewModels\MandPViewModel.cs" />
     <Compile Include="ViewModels\MembersLoginViewModel.cs" />
     <Compile Include="ViewModels\MembersRegisterViewModel.cs" />
     <Compile Include="ViewModels\PrincessConnectViewModel.cs" />

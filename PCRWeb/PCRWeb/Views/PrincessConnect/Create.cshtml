@@ -33,6 +33,8 @@
 
     function clickAllClear() {
         falseCount = 0;
+        //a1 = ""; a2 = ""; a3 = ""; a4 = ""; a5 = "";
+        //d1 = ""; d2 = ""; d3 = ""; d4 = ""; d5 = "";
         //document.getElementById('ARN').innerHTML = "";
         allRoleName = "";
         for (var i = 0; i < roleCount; i++) {
@@ -117,9 +119,9 @@
             }
             d1 = Role[0]; d2 = Role[1]; d3 = Role[2]; d4 = Role[3]; d5 = Role[4];
         }
-        console.log("AD:" + a1 + " " + a2 + " " + a3 + " " + a4 + " " + a5 + " // " + d1 + " " + d2 + " " + d3 + " " + d4 + " " + d5 + " ");
     }
     function submitForm() {
+        document.getElementById("submitMainButton").disabled = true;
         var model = new Object();
         Note = document.getElementById("submitNote").value;
         model.a1 = a1; model.d1 = d1;
@@ -127,21 +129,40 @@
         model.a3 = a3; model.d3 = d3;
         model.a4 = a4; model.d4 = d4;
         model.a5 = a5; model.d5 = d5;
+        let imga0 = document.getElementById("ai0").getAttribute("src"); let imga1 = document.getElementById("ai1").getAttribute("src"); let imga2 = document.getElementById("ai2").getAttribute("src"); let imga3 = document.getElementById("ai3").getAttribute("src"); let imga4 = document.getElementById("ai4").getAttribute("src");
+        let imgd0 = document.getElementById("di0").getAttribute("src"); let imgd1 = document.getElementById("di1").getAttribute("src"); let imgd2 = document.getElementById("di2").getAttribute("src"); let imgd3 = document.getElementById("di3").getAttribute("src"); let imgd4 = document.getElementById("di4").getAttribute("src");
+        document.getElementById("submitAttackRequired").innerHTML = "";
+        document.getElementById("submitDefenceRequired").innerHTML = "";
+        if (imga0==null && imga1==null && imga2 == null && imga3 == null && imga4 == null) {
+            document.getElementById("submitAttackRequired").innerHTML = "<font style=\"vertical - align: inherit; \"><font style = \"vertical-align: inherit;\" >必填項</font></font>";
+            if (imgd0 == null && imgd1 == null && imgd2 == null && imgd3 == null && imgd4 == null) {
+                document.getElementById("submitDefenceRequired").innerHTML = "<font style=\"vertical - align: inherit; \"><font style = \"vertical-align: inherit;\" >必填項</font></font>";
+                document.getElementById("submitMainButton").disabled = false;
+                return;
+            }
+        }
+        else if (imgd0 == null && imgd1 == null && imgd2 == null && imgd3 == null && imgd4 == null) {
+            document.getElementById("submitDefenceRequired").innerHTML = "<font style=\"vertical - align: inherit; \"><font style = \"vertical-align: inherit;\" >必填項</font></font>";
+            document.getElementById("submitMainButton").disabled = false;
+            return;
+        }
         model.content = Note;
         jQuery.ajax({
             type: "POST",
-            url: "@Url.Action("Create")",
+            url: "@Url.Action("Create", "PrincessConnect")",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ p: model }),
             success: function (data) {
                 alert("新增成功!");
+                alert('Hi');
             },
             failure: function (errMsg) {
                 alert(errMsg);
             }
         });
         parent.location.reload();
+        document.getElementById("submitMainButton").disabled = false;
     }
 </script>
 <script type="text/javascript">
@@ -186,10 +207,22 @@
     </tr>
 </table>
 <input type="button" value="新增進攻" onclick="clickLink('attack')" style="background: rgba(255,255,255,0.5);" />
+
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input type="button" value="新增防守" onclick="clickLink('defense')" style="background: rgba(255,255,255,0.5);" />
+<div>
+    <span id="submitAttackRequired" style="color:red">
+    </span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span id="submitDefenceRequired" style="color:red">
+    </span>
+</div>
 <br>
 <span style="background: rgba(255,255,255,0.5); font-size:17px;">
     備註:
@@ -198,4 +231,4 @@
 <textarea id="submitNote" style=" border: solid 1px #DDD;background-color:lightgray;
  background: rgba(255,255,255,0.5);width: 100%;padding: 2px 4px;border-radius: 0.5em;resize: vertical;
  box-sizing: border-box;"></textarea>
-<input type="button" value="新增送出" onclick="submitForm()" style="background: rgba(255,255,255,0.5);" />
+<input id="submitMainButton" type="button" value="新增送出" onclick="submitForm()" style="background: rgba(255,255,255,0.5);" />

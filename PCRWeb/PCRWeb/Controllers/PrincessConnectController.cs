@@ -213,6 +213,22 @@ namespace PCRWeb.Controllers
             return Json(json);
         }
         [HttpPost]
+        public ActionResult bookIDGetData(int i)
+        {
+            PositiveAndNegativeReturn pn = new PositiveAndNegativeReturn();
+            pn = PrincessConnectDBService.PN(i);
+            string json = JsonConvert.SerializeObject(pn);
+            return Json(json);
+        }
+        [HttpPost]
+        public ActionResult MandPIDGetData(string account,int i)
+        {
+            int result;
+            result = PrincessConnectDBService.MandPPNReturn(account,i);
+            string json = JsonConvert.SerializeObject(result);
+            return Json(json);
+        }
+        [HttpPost]
         public ActionResult PositiveEdit(PrincessConnect p,Members m)
         {
             PositiveAndNegativeReturn returnPandN = new PositiveAndNegativeReturn();
@@ -228,6 +244,14 @@ namespace PCRWeb.Controllers
             PositiveAndNegativeReturn returnPandN = new PositiveAndNegativeReturn();
             returnPandN = PrincessConnectDBService.SearchNegative(p, m);
             string json = JsonConvert.SerializeObject(returnPandN);
+            return Json(json);
+        }
+        [HttpPost]
+        public ActionResult SearchPositiveAndNegative(Members m)
+        {
+            MandPViewModel mp = new MandPViewModel();
+            mp.dataList = PrincessConnectDBService.PositiveAndNegativeSearch(m);
+            string json = JsonConvert.SerializeObject(mp);
             return Json(json);
         }
     }

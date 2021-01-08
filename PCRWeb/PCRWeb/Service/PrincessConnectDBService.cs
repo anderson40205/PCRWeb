@@ -40,7 +40,65 @@ namespace PCRWeb.Service
             }
         }
         #endregion
-
+        public PositiveAndNegativeReturn PN(int id)
+        {
+            PositiveAndNegativeReturn pn = new PositiveAndNegativeReturn();
+            string sql = $@" SELECT * FROM PrincessConnect WHERE Id = N'{id}' ";
+            try
+            {
+                conn.Open();//開啟DB連線
+                SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql資料
+                SqlDataReader dr = cmd.ExecuteReader();
+                //SqlDataReader 的預設位置是在第一筆記錄之前。 因此，您必須呼叫 Read 才能開始存取任何資料。
+                if(dr.Read())
+                {
+                    pn.positive = Convert.ToInt32(dr["positive"]); pn.negative = Convert.ToInt32(dr["negative"]);
+                }
+            }
+            catch (Exception s)
+            {
+                Console.WriteLine(s.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return pn;
+        }
+        public int MandPPNReturn(string account,int id)
+        {
+            string sql = $@" SELECT * FROM MandP WHERE MPAccount = N'{account}' AND PId = N'{id}' ";
+            int result = 0;
+            try
+            {
+                conn.Open();//開啟DB連線
+                SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql資料
+                SqlDataReader dr = cmd.ExecuteReader();
+                //SqlDataReader 的預設位置是在第一筆記錄之前。 因此，您必須呼叫 Read 才能開始存取任何資料。
+                if (dr.Read())
+                {
+                    if (dr["status"].ToString() == "p")
+                    {
+                        result = 1;
+                    }
+                    else if (dr["status"].ToString() == "n")
+                    {
+                        result = 2;
+                    }
+                }
+                else
+                    result = 0;
+            }
+            catch (Exception s)
+            {
+                Console.WriteLine(s.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
         public List<PrincessConnect> SearchDefense(PrincessConnect d)
         {
             List<PrincessConnect> dataList = new List<PrincessConnect>();
@@ -72,6 +130,35 @@ namespace PCRWeb.Service
                 conn.Close();
             }
             return dataList;
+        }
+        public List<MandP> PositiveAndNegativeSearch(Members m)
+        {
+            List<MandP> mp = new List<MandP>();
+            
+            string sql = $@" SELECT * FROM MandP WHERE MPAccount = N'{m.Account}'";
+            try
+            {
+                conn.Open();//開啟DB連線
+                SqlCommand cmd = new SqlCommand(sql, conn);//取得Sql資料
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    MandP mData = new MandP();
+                    mData.MPAccount = dr["MPAccount"].ToString();
+                    mData.PID = Convert.ToInt32(dr["PID"]);
+                    mData.status = dr["status"].ToString();
+                    mp.Add(mData);
+                }   
+            }
+            catch (Exception s)
+            {
+                Console.WriteLine(s.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return mp;
         }
         public PositiveAndNegativeReturn SearchPositive(PrincessConnect p,Members m)
         {//這邊一律處理使用者點讚這個動作，沒有=>新增到關聯表，使用者以經典過讚了=>從關聯表移除這列，PCR表該行讚減一
@@ -128,6 +215,7 @@ namespace PCRWeb.Service
                         int positiveCount = Convert.ToInt32(drTemp["positive"]);
                         drTemp.Close();
                         new SqlCommand($@" UPDATE PrincessConnect SET positive = N'{positiveCount + 1}' WHERE Id='{p.Id}'", conn).ExecuteNonQuery();
+                        Data.positive = positiveCount + 1;
                     }
                 }
             }
@@ -196,6 +284,7 @@ namespace PCRWeb.Service
                         int negativeCount = Convert.ToInt32(drTemp["negative"]);
                         drTemp.Close();
                         new SqlCommand($@" UPDATE PrincessConnect SET negative = N'{negativeCount + 1}' WHERE Id='{p.Id}'", conn).ExecuteNonQuery();
+                        Data.negative = negativeCount + 1;
                     }
                 }
             }
