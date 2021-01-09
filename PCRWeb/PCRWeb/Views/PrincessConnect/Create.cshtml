@@ -140,6 +140,8 @@
                 document.getElementById("submitMainButton").disabled = false;
                 return;
             }
+            document.getElementById("submitMainButton").disabled = false;
+            return;
         }
         else if (imgd0 == null && imgd1 == null && imgd2 == null && imgd3 == null && imgd4 == null) {
             document.getElementById("submitDefenceRequired").innerHTML = "<font style=\"vertical - align: inherit; \"><font style = \"vertical-align: inherit;\" >必填項</font></font>";
@@ -149,19 +151,21 @@
         model.content = Note;
         jQuery.ajax({
             type: "POST",
-            url: "@Url.Action("Create", "PrincessConnect")",
+            url: '@Url.Action("Create", "PrincessConnect")',
             dataType: "json",
+            cache: false,
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({ p: model }),
-            success: function (data) {
+            //data: { "p": model },
+            data: JSON.stringify({ "p": model }),
+            success: function (data, textStatus, jqXHR) {
                 alert("新增成功!");
-                alert('Hi');
+                parent.location.reload();
             },
+            //error: function (jqXHR, textStatus, errorThrown) {
             failure: function (errMsg) {
                 alert(errMsg);
             }
         });
-        parent.location.reload();
         document.getElementById("submitMainButton").disabled = false;
     }
 </script>
