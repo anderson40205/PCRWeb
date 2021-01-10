@@ -34,7 +34,6 @@ namespace PCRWeb.Controllers
         }
         //傳入註冊資料的Action
         [HttpPost]
-        //設定此Action只接受頁面POST資料傳入
         public ActionResult Register(MembersRegisterViewModel RegisterMember)
         {
             //判斷頁面資料是否都經過驗證
@@ -67,8 +66,6 @@ namespace PCRWeb.Controllers
             return Json(membersService.AccountCheck(RegisterMember.newMember.Account),
                 JsonRequestBehavior.AllowGet);
         }
-
-        //接收驗證信連結傳進來的Action
         #endregion
 
         #region 登入
@@ -81,7 +78,7 @@ namespace PCRWeb.Controllers
             return View();//否則進入登入畫面
         }
         //傳入登入資料的Action
-        [HttpPost] //設定此Action只接受頁面POST資料傳入
+        [HttpPost] 
         public ActionResult Login(MembersLoginViewModel LoginMember)
         {
             //使用Service裡的方法來驗證登入的帳號密碼
