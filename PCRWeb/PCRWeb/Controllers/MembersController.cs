@@ -51,7 +51,7 @@ namespace PCRWeb.Controllers
             RegisterMember.Password = null;
             RegisterMember.PasswordCheck = null;
             //將資料回填至View中
-            return View(RegisterMember);
+            return View("Login",RegisterMember);
         }
 
         //註冊結果顯示頁面
