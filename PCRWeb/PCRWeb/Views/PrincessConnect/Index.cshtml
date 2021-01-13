@@ -1,11 +1,11 @@
 ﻿@model PCRWeb.ViewModels.PrincessConnectViewModel
 @{
-    ViewBag.Title = "Index";//顯示標題用
+    ViewBag.Title = "防禦隊伍進攻查詢";//顯示標題用
     var allRoleList = ViewBag.List;
 }
 <head>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>var Account = "";</script>
+    <script>var Account = ""; </script>
     @if (User.Identity.IsAuthenticated)
     {
         <script>Account = "@(User.Identity.Name)";</script>
@@ -27,7 +27,6 @@
     <input type="submit" id="OK" value="確認" style="display: none;" onclick="clickLink()" />
 </div>
 <script type="text/javascript">
-    console.log("Account: " + Account);
     let fiveCount = 0;
     let Role = [];
     let roleCount = 134;
@@ -71,6 +70,16 @@
         }
         hide();
         d1 = Role[0]; d2 = Role[1]; d3 = Role[2]; d4 = Role[3]; d5 = Role[4];
+        let imgd0 = document.getElementById("di0").getAttribute("src"); let imgd1 = document.getElementById("di1").getAttribute("src"); let imgd2 = document.getElementById("di2").getAttribute("src"); let imgd3 = document.getElementById("di3").getAttribute("src"); let imgd4 = document.getElementById("di4").getAttribute("src");
+        if (imgd0 == null && imgd1 == null && imgd2 == null && imgd3 == null && imgd4 == null) {
+            document.getElementById("prompt").innerHTML = "";
+            document.getElementById("prompt").innerHTML = "<font style=\"vertical - align: inherit; \"><font style = \"vertical-align: inherit;\" >請至少選擇一個角色</font></font>";
+            document.getElementById("MainSearchButton").setAttribute("disabled", "disabled");
+        }
+        else {
+            document.getElementById("prompt").innerHTML = "";
+            document.getElementById("MainSearchButton").removeAttribute("disabled");
+        }
     }
     function hide() {
         hideToggle = !hideToggle;
@@ -140,6 +149,8 @@
         falseCount = 0;
     }
     function submitForm() {
+        document.getElementById("MainSearchButton").setAttribute("disabled", "disabled");
+        document.getElementById("prompt").innerHTML = "";
         var model = new Object();
         model.d1 = d1;
         model.d2 = d2;
@@ -157,6 +168,10 @@
                 d1View = []; d2View = []; d3View = []; d4View = []; d5View = [];
                 insertTimeView = []; contentView = []; positiveView = []; negativeView = [];
                 var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
+                if (obj1.dataList == "") {
+                    document.getElementById("prompt").innerHTML = "<font style=\"vertical - align: inherit; \"><font style = \"vertical-align: inherit;\" >查無結果</font></font>";
+                }
+                
                 $.each(obj1.dataList, function (i, obj2) {
                     queryCount++;
                     idView.push(obj1.dataList[i]["Id"]);
@@ -167,20 +182,22 @@
                 });
                 document.getElementById("ADView").innerHTML = "";
                 for (var i = 0; i < queryCount; i++) {
-                    document.getElementById("ADView").innerHTML += "<br><div id=ADView" + idView[i] + " style=\"background: rgba(255, 255, 255, 0.5);\">" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
+                    document.getElementById("ADView").innerHTML += "<br><span id=ADView" + idView[i] + " style=\"background: rgba(255, 255, 255, 0.5);\">" + '<img src=\"../Images/' + a1View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
                         '<img src=\"../Images/' + a2View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + a3View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
                         '<img src=\"../Images/' + a4View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + a5View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + "&nbsp;" +
                         '<img src=\"../Images/' + d1View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
                         '<img src=\"../Images/' + d2View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + d3View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' +
                         '<img src=\"../Images/' + d4View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + '<img src=\"../Images/' + d5View[i] + '.png\" style=\"width: 40px; height: 40px;\" >' + "時間:" + insertTimeView[i] + "<br>評論:" + contentView[i] +
-                        "<br><span id=AView" + idView[i] + " onclick=\"good(" + idView[i] + ")\" style=\"font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128402;</span><span id=\"pCount" + idView[i] + "\">" + positiveView[i] + "</span>&nbsp;&nbsp;&nbsp;<span id=DView" + idView[i] +
-                        " onclick=\"bad(" + idView[i] + ")\" style=\"font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128403;</span><span id=\"nCount" + idView[i] + "\">" + negativeView[i] + "</span> ";
+                        "<br><span id=AView" + idView[i] + " onclick=\"good(" + idView[i] + ")\" style=\"font-size: 18px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128402;</span><span id=\"pCount" + idView[i] + "\">" + positiveView[i] + "</span>&nbsp;&nbsp;&nbsp;<span id=DView" + idView[i] +
+                        " onclick=\"bad(" + idView[i] + ")\" style=\"font-size: 18px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; \">&#128403;</span><span id=\"nCount" + idView[i] + "\">" + negativeView[i] + "</span></span>";
                 }
                 queryCount = 0;
+                document.getElementById("MainSearchButton").removeAttribute("disabled");
                 GoodBadView();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Found error when using Ajax!!");// 記得要加入error handler不然很難除錯
+                document.getElementById("MainSearchButton").removeAttribute("disabled");
             }
         });
 
@@ -267,17 +284,17 @@
             success: function (data, textStatus, jqXHR) {
                 var obj1 = JSON.parse(data); //由JSON字串轉換為JSON物件
                 if (gd == "good" && parseInt(obj1) == 1) {
-                    document.getElementById("AView" + ID).style = "font-size: 25px;color:red; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
-                    document.getElementById("DView" + ID).style = "font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                    document.getElementById("AView" + ID).style = "font-size: 18px;color:red; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                    document.getElementById("DView" + ID).style = "font-size: 18px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
                 }
                 else if (gd == "good" && parseInt(obj1) == 0)
-                    document.getElementById("AView" + ID).style = "font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                    document.getElementById("AView" + ID).style = "font-size: 18px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
                 else if (gd == "bad" && parseInt(obj1) == 2) {
-                    document.getElementById("DView" + ID).style = "font-size: 25px;color:red; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
-                    document.getElementById("AView" + ID).style = "font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                    document.getElementById("DView" + ID).style = "font-size: 18px;color:red; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                    document.getElementById("AView" + ID).style = "font-size: 18px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
                 }
                 else if (gd == "bad" && parseInt(obj1) == 0)
-                    document.getElementById("DView" +ID).style = "font-size: 25px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
+                    document.getElementById("DView" + ID).style = "font-size: 18px;color:black; display: inline; cursor: pointer; user - select: none; margin - right: 20px; ";
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Found error when using Ajax!!");
@@ -341,7 +358,8 @@
     </tr>
 </table>
 
-<input type="button" value="查詢" onclick="submitForm()" style="background: rgba(255,255,255,0.5);" />
+<input id="MainSearchButton" type="button" value="查詢" onclick="submitForm()" style="background: rgba(255,255,255,0.5);" disabled/>
+<div id="prompt" style="color:red"></div>
 <div id="displayView">
     <span id="ADView"></span>
 </div>
