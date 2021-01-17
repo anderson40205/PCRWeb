@@ -1,0 +1,236 @@
+﻿@model PCRWeb.ViewModels.PrincessConnectViewModel
+@{
+    ViewBag.Title = "隊伍投稿";//顯示標題用
+    var allRoleList = ViewBag.List;
+}
+<body background="~/Images/競技場.png" style="background-size: cover; margin: 0; ">
+</body>
+<input type="button" value="清除全部" onclick="clickAllClear()" style="background: rgba(255,255,255,0.5);" />
+
+<br>
+@*建立新增資料所需的表單*@
+<div id="Attack">
+    @for (int i = 0; i < 134; i++)
+    {
+        <button type="submit" id="@i" value="@(allRoleList[i])" onclick="clickImageBolder(@(i))" style="width: 70px; height: 70px; border:none; background-color:transparent;">
+            <img src="~/Images/@(allRoleList[i]).png " style="width: 50px; height: 50px; border:none;" />
+        </button>
+    }
+</div>
+<script type="text/javascript">
+    let fiveCount = 0;
+    let Role = [];
+    let roleCount = 134;
+    let falseCount = 0;
+    var pcrState = [];
+    let allRoleName = "";
+    let a1 = ""; let a2 = ""; let a3 = ""; let a4 = ""; let a5 = "";
+    let d1 = ""; let d2 = ""; let d3 = ""; let d4 = ""; let d5 = "";
+    let Note = "";
+    for (var i = 0; i < roleCount; i++) {
+        pcrState.push(true);
+    }
+
+    function clickAllClear() {
+        falseCount = 0;
+        //a1 = ""; a2 = ""; a3 = ""; a4 = ""; a5 = "";
+        //d1 = ""; d2 = ""; d3 = ""; d4 = ""; d5 = "";
+        //document.getElementById('ARN').innerHTML = "";
+        allRoleName = "";
+        for (var i = 0; i < roleCount; i++) {
+            pcrState[i] = true;
+            document.getElementById(i).style = "border:none; width: 70px; height: 70px;background-color:transparent;";
+            document.getElementById(i).removeAttribute("disabled");
+        }
+    }
+
+    function clickImageBolder(number) {
+        falseCount = 0;
+        if (pcrState[number]) {
+            document.getElementById(number).style = "color:blue; border: solid 4px ; width: 70px; height: 70px;background-color:transparent;";
+            pcrState[number] = !pcrState[number];
+        }
+        else {
+            document.getElementById(number).style = "border:none;width: 70px; height: 70px;background-color:transparent;";
+            pcrState[number] = !pcrState[number];
+        }
+        for (var i = 0; i < roleCount; i++) {
+            if (pcrState[i] == false) {
+                falseCount++;
+            }
+        }
+
+        if (falseCount == 5) {
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == true) {
+                    document.getElementById(i).setAttribute("disabled", "disabled");
+                }
+            }
+        }
+        else {
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == true) {
+                    document.getElementById(i).removeAttribute("disabled");
+                }
+            }
+        }
+        for (var i = 0; i < roleCount; i++) {
+            if (pcrState[i] == false) {
+                allRoleName += document.getElementById(i).value + " ";
+            }
+        }
+        //document.getElementById('ARN').innerHTML = allRoleName;
+        allRoleName = "";
+        falseCount = 0;
+    }
+    function clickLink(value) {
+
+        if (value == "attack") {
+            attackClear();
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    Role.push(document.getElementById(i).value);
+                }
+            }
+            fiveCount = 0;
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    var obj = document.getElementById("ai" + fiveCount);
+                    obj.setAttribute("src", "../Images/" + Role[fiveCount] + ".png");//不能用~/Imges
+                    fiveCount++;
+                }
+            }
+            a1 = Role[0]; a2 = Role[1]; a3 = Role[2]; a4 = Role[3]; a5 = Role[4];
+        }
+        if (value == "defense") {
+            defenseClear();
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    Role.push(document.getElementById(i).value);
+                }
+            }
+            fiveCount = 0;
+            for (var i = 0; i < roleCount; i++) {
+                if (pcrState[i] == false) {
+                    var obj = document.getElementById("di" + fiveCount);
+                    obj.setAttribute("src", "../Images/" + Role[fiveCount] + ".png");//不能用~/Imges
+                    fiveCount++;
+                }
+            }
+            d1 = Role[0]; d2 = Role[1]; d3 = Role[2]; d4 = Role[3]; d5 = Role[4];
+        }
+    }
+    function submitForm() {
+        document.getElementById("submitMainButton").disabled = true;
+        var model = new Object();
+        Note = document.getElementById("submitNote").value;
+        model.a1 = a1; model.d1 = d1;
+        model.a2 = a2; model.d2 = d2;
+        model.a3 = a3; model.d3 = d3;
+        model.a4 = a4; model.d4 = d4;
+        model.a5 = a5; model.d5 = d5;
+        let imga0 = document.getElementById("ai0").getAttribute("src"); let imga1 = document.getElementById("ai1").getAttribute("src"); let imga2 = document.getElementById("ai2").getAttribute("src"); let imga3 = document.getElementById("ai3").getAttribute("src"); let imga4 = document.getElementById("ai4").getAttribute("src");
+        let imgd0 = document.getElementById("di0").getAttribute("src"); let imgd1 = document.getElementById("di1").getAttribute("src"); let imgd2 = document.getElementById("di2").getAttribute("src"); let imgd3 = document.getElementById("di3").getAttribute("src"); let imgd4 = document.getElementById("di4").getAttribute("src");
+        document.getElementById("submitAttackRequired").innerHTML = "";
+        document.getElementById("submitDefenceRequired").innerHTML = "";
+        if (imga0==null && imga1==null && imga2 == null && imga3 == null && imga4 == null) {
+            document.getElementById("submitAttackRequired").innerHTML = "<font style=\"vertical - align: inherit; \"><font style = \"vertical-align: inherit;\" >必填項</font></font>";
+            if (imgd0 == null && imgd1 == null && imgd2 == null && imgd3 == null && imgd4 == null) {
+                document.getElementById("submitDefenceRequired").innerHTML = "<font style=\"vertical - align: inherit; \"><font style = \"vertical-align: inherit;\" >必填項</font></font>";
+                document.getElementById("submitMainButton").disabled = false;
+                return;
+            }
+            document.getElementById("submitMainButton").disabled = false;
+            return;
+        }
+        else if (imgd0 == null && imgd1 == null && imgd2 == null && imgd3 == null && imgd4 == null) {
+            document.getElementById("submitDefenceRequired").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font style=\"vertical - align: inherit; \"><font style = \"vertical-align: inherit;\" >必填項</font></font>";
+            document.getElementById("submitMainButton").disabled = false;
+            return;
+        }
+        model.content = Note;
+        jQuery.ajax({
+            type: "POST",
+            url: '@Url.Action("Create", "PrincessConnect")',
+            dataType: "json",
+            cache: false,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ "p": model }),
+            success: function (data, textStatus, jqXHR) {
+                alert("新增成功!");
+                parent.location.reload();
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+        document.getElementById("submitMainButton").disabled = false;
+    }
+</script>
+<script type="text/javascript">
+    function attackClear() {
+        Role = [];
+        fiveCount = 0;
+        for (var i = 0; i < 5; i++) {
+            document.getElementById("ai" + i).removeAttribute("src");
+        }
+    }
+    function defenseClear() {
+        Role = [];
+        fiveCount = 0;
+        for (var i = 0; i < 5; i++) {
+            document.getElementById("di" + i).removeAttribute("src");
+        }
+    }
+</script>
+
+<br>
+<table style="background-color:lightgray; background:rgba(255,255,255,0.5);">
+    <tr>
+        <td>
+            &nbsp;&nbsp;&nbsp;
+            進攻:
+            <img id="ai0" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai1" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai2" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai3" style="width: 50px; height: 50px; border:none;" />
+            <img id="ai4" style="width: 50px; height: 50px; border:none;" />
+        </td>
+
+        <td>
+            &nbsp;&nbsp;&nbsp;
+            防守:
+            <img id="di0" style="width: 50px; height: 50px; border:none;" />
+            <img id="di1" style="width: 50px; height: 50px; border:none;" />
+            <img id="di2" style="width: 50px; height: 50px; border:none;" />
+            <img id="di3" style="width: 50px; height: 50px; border:none;" />
+            <img id="di4" style="width: 50px; height: 50px; border:none;" />
+        </td>
+    </tr>
+</table>
+<input type="button" value="新增進攻" onclick="clickLink('attack')" style="background: rgba(255,255,255,0.5);" />
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" value="新增防守" onclick="clickLink('defense')" style="background: rgba(255,255,255,0.5);" />
+<div>
+    <span id="submitAttackRequired" style="color:red">
+    </span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span id="submitDefenceRequired" style="color:red">
+    </span>
+</div>
+<br>
+<span style="background: rgba(255,255,255,0.5); font-size:17px;">
+    備註:
+</span>
+<br>
+<textarea id="submitNote" style=" border: solid 1px #DDD;background-color:lightgray;
+ background: rgba(255,255,255,0.5);width: 100%;padding: 2px 4px;border-radius: 0.5em;resize: vertical;
+ box-sizing: border-box;"></textarea>
+<input id="submitMainButton" type="button" value="新增送出" onclick="submitForm()" style="background: rgba(255,255,255,0.5);" />
